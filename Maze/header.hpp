@@ -11,10 +11,10 @@
 
 // #define SCREEN_WIDTH  640
 // #define SCREEN_HEIGHT 480
-#define ROWS           66
-#define COLUMNS        66
-#define CELL_WIDTH     15
-#define CELL_HEIGHT    15
+#define ROWS           10
+#define COLUMNS        10
+#define CELL_WIDTH     35
+#define CELL_HEIGHT    35
 
 
 #define WINDOW_WIDTH   CELL_WIDTH*COLUMNS
