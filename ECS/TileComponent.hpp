@@ -25,8 +25,8 @@ class TileComponent : public Component
         TileComponent(int x, int y, int w, int h, int id, int scaleBackground)
         {
             tileRect = {
-                .x = x*scaleBackground,
-                .y = y*scaleBackground,
+                .x = y*scaleBackground, // Need to change x,y order because 
+                .y = x*scaleBackground, // of the convention
                 .w = w*scaleBackground,
                 .h = h*scaleBackground,
             };
