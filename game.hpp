@@ -31,7 +31,7 @@ class Game{
         static std::vector<ColliderComponent*> colliders;
         static void AddTile(int id, int x, int y);
         
-
+        static SDL_Rect camera;
 
     private:
         bool isRunning;

@@ -3,6 +3,7 @@
 
 #include "Components.hpp"
 #include "../Vector2D.hpp"
+#include "../game.hpp"
 
 class TransformComponent : public Component{
 
@@ -50,8 +51,14 @@ class TransformComponent : public Component{
 
         void update() override
         {   
-            // position.x += velocity.x * speed;
-            // position.y += velocity.y * speed;
+            position.x += velocity.x * speed;
+            position.y += velocity.y * speed;
+
+            position.x = max(position.x,0.0f);
+            position.y = max(position.y,0.0f);
+
+            position.x = min(position.x, static_cast<float>(Game::camera.x + Game::camera.w - width *scale  ) );
+            position.y = min(position.y, static_cast<float>(Game::camera.y + Game::camera.h - height*scale ) );
         }
 
 };

@@ -18,6 +18,8 @@ MazeGeneration* MazeGenerator;
 SDL_Renderer* Game::renderer = NULL;
 SDL_Event Game::event;
 
+SDL_Rect Game::camera = {0, 0, 800, 640};
+
 std::vector<ColliderComponent*> Game::colliders;
 
 Manager manager;
@@ -114,14 +116,22 @@ void Game::update(){
     manager.refresh();
     manager.update();
 
-    Vector2D pVel = player.getComponent<TransformComponent>().velocity;
-    int pSpeed    = player.getComponent<TransformComponent>().speed;  
+    camera.x = player.getComponent<TransformComponent>().position.x - 400;
+    camera.y = player.getComponent<TransformComponent>().position.y - 320;
 
-    for(auto t: tiles)
-    {
-        t->getComponent<TileComponent>().tileRect.x += -(pVel.x * pSpeed);
-        t->getComponent<TileComponent>().tileRect.y += -(pVel.y * pSpeed);
-    }
+    camera.x = max(camera.x,0);
+    camera.y = max(camera.y,0);
+    camera.x = min(camera.x, camera.w);
+    camera.y = min(camera.y, camera.h);
+
+    // Vector2D pVel = player.getComponent<TransformComponent>().velocity;
+    // int pSpeed    = player.getComponent<TransformComponent>().speed;  
+
+    // for(auto t: tiles)
+    // {
+    //     t->getComponent<TileComponent>().tileRect.x += -(pVel.x * pSpeed);
+    //     t->getComponent<TileComponent>().tileRect.y += -(pVel.y * pSpeed);
+    // }
 
     // for(auto cc: colliders)
     // {
