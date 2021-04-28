@@ -25,8 +25,8 @@ class TileComponent : public Component
         TileComponent(int x, int y, int w, int h, int id, int scaleBackground)
         {
             tileRect = {
-                .x = y*scaleBackground, // Need to change x,y order because 
-                .y = x*scaleBackground, // of the convention
+                .x = y*scaleBackground,
+                .y = x*scaleBackground,
                 .w = w*scaleBackground,
                 .h = h*scaleBackground,
             };
@@ -37,6 +37,9 @@ class TileComponent : public Component
 
             temp_path = color + "_" + to_string(id) + ".png";
             texture = TextureManager::LoadTexture(temp_path.c_str());
+
+            // if(tileRect.x == 0)
+            // cout << tileRect.x << " " << tileRect.y << " " <<  id << " " << temp_path << "\n";
             
             // cout << temp_path << endl;
             // strcpy(path, temp_path.c_str());

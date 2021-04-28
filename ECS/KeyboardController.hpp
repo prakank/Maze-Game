@@ -55,7 +55,9 @@ class KeyboardController : public Component
                         sprite->Play("Idle");
                         sprite->RotateDegrees = 180;
                         break;
-
+                    case SDLK_ESCAPE:
+                        Game::isRunning = false;
+                        break;
                     default:
                         break;
                 }

@@ -20,6 +20,8 @@ SDL_Event Game::event;
 
 SDL_Rect Game::camera = {0, 0, 800, 640};
 
+bool Game::isRunning = false;
+
 std::vector<ColliderComponent*> Game::colliders;
 
 Manager manager;
@@ -56,20 +58,20 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
     if( SDL_Init(SDL_INIT_EVERYTHING) < 0){
         printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
-        isRunning = false;
+        Game::isRunning = false;
         return;
     }
     else{
         window = SDL_CreateWindow(title, xpos, ypos, width, height, flag);
         if( window == NULL){
             printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
-            isRunning = false;
+            Game::isRunning = false;
             return;
         }
         renderer = SDL_CreateRenderer(window, -1, 0);
         if(renderer == NULL){
             printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
-            isRunning = false;  
+            Game::isRunning = false;  
             return;
         }
         else{
@@ -81,8 +83,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
         Map::LoadMap("assets/Maze.txt", 20, 25);
 
-        player.addComponent<TransformComponent>(4);
-        player.addComponent<SpriteComponent>("assets/PlayerAnimatePro.png", true);
+        player.addComponent<TransformComponent>(scaleBackground);
+        player.addComponent<SpriteComponent>("assets/player.png", false);
         player.addComponent<KeyboardController>();
         player.addComponent<ColliderComponent>("Player");
         player.addGroup(groupPlayers);
@@ -93,7 +95,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         // wall.addGroup(groupMap);
         
     }
-    isRunning = true;
+    Game::isRunning = true;
     return;
 }
 
@@ -101,7 +103,7 @@ void Game::handleEvents(){
     SDL_PollEvent(&event);
     switch(event.type){
         case SDL_QUIT:
-            isRunning = false;
+            Game::isRunning = false;
             break;
 
         default:
@@ -121,8 +123,8 @@ void Game::update(){
 
     camera.x = max(camera.x,0);
     camera.y = max(camera.y,0);
-    camera.x = min(camera.x, camera.w);
-    camera.y = min(camera.y, camera.h);
+    camera.x = min(camera.x, camera.w * ( scaleBackground - 1 ) );
+    camera.y = min(camera.y, camera.h * ( scaleBackground - 1 ) );
 
     // Vector2D pVel = player.getComponent<TransformComponent>().velocity;
     // int pSpeed    = player.getComponent<TransformComponent>().speed;  
@@ -202,4 +204,5 @@ void Game::AddTile(int id, int x, int y)
     tile.addComponent<TileComponent>(x, y, 32, 32, id, scaleBackground);
     // tile.addComponent<ColliderComponent>("Tiles");
     tile.addGroup(groupMap);
+    // cout << id << "\n";
 }

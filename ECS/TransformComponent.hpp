@@ -24,7 +24,7 @@ class TransformComponent : public Component{
 
         TransformComponent(float s)
         {
-            position.x = 400;
+            position.x = 400; // Starting with centre of the screen
             position.y = 320;
             scale = s;
         }

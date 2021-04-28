@@ -32,9 +32,10 @@ class Game{
         static void AddTile(int id, int x, int y);
         
         static SDL_Rect camera;
+        static bool isRunning;
 
     private:
-        bool isRunning;
+        
         int cnt = 0;
         SDL_Window* window = NULL;
     

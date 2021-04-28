@@ -33,7 +33,7 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
             
             tile = MapTileArray[x][y];
             Game::AddTile(tile, x*32, y*32);
-            
+            // cout << tile << " ";
         }
 
         // cout << "\n";
