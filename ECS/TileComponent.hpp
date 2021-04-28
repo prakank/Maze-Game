@@ -31,10 +31,10 @@ class TileComponent : public Component
                 .h = h*scaleBackground,
             };
 
-            if(x == 0 && y == 0)
-            {
-                cout << w << " " << h << " " <<  scaleBackground << endl;
-            }
+//             if(x == 0 && y == 0)
+//             {
+//                 cout << w << " " << h << " " <<  scaleBackground << endl;
+//             }
             
             tileId = id;
             position.x = tileRect.x;
