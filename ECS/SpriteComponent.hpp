@@ -5,6 +5,8 @@
 #include <SDL2/SDL.h>
 #include "../TextureManager.hpp"
 #include "Animation.hpp"
+#include "../game.hpp"
+#include "../Constants.hpp"
 #include <map>
 
 class SpriteComponent : public Component
@@ -12,10 +14,12 @@ class SpriteComponent : public Component
     private:
         TransformComponent *transform;
         SDL_Texture* texture = NULL;
+        
         SDL_Rect srcRect, dstRect;
+        
         bool animate = false;
         int frames = 4;
-        int speed = 100;
+        int speed = ANIMATION_SPEED;
 
     public:        
 
@@ -37,8 +41,8 @@ class SpriteComponent : public Component
         {
             animate = isAnimated;
 
-            Animation idle = Animation(0, 3, 100);
-            Animation move = Animation(1, 8, 200);
+            Animation idle = Animation(0, FRAMES_FOR_IDLE,   ANIMATION_SPEED);
+            Animation move = Animation(1, FRAMES_FOR_MOTION, ANIMATION_SPEED);
 
             animations.emplace("Idle", idle);
             animations.emplace("Move", move);
@@ -78,8 +82,12 @@ class SpriteComponent : public Component
 
             dstRect.x = static_cast<int>(transform->position.x) - Game::camera.x;
             dstRect.y = static_cast<int>(transform->position.y) - Game::camera.y;
-            dstRect.w = transform->width * transform->scale;
-            dstRect.h = transform->height * transform->scale;
+            dstRect.w = ( transform->width  - Game::RowsToSkip )* transform->scale;
+            dstRect.h = ( transform->height - Game::RowsToSkip )* transform->scale;
+
+            
+            // cout << transform->width << " " << Game::RowsToSkip << " " << transform->scale << endl;
+            // cout << dstRect.w << " " << dstRect.h << " " <<  transform->scale << "\n";
         }
 
         void draw() override

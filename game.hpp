@@ -33,6 +33,8 @@ class Game{
         
         static SDL_Rect camera;
         static bool isRunning;
+        static int RowsToSkip;
+        static string Color;
 
     private:
         

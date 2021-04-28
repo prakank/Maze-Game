@@ -18,4 +18,8 @@ void TextureManager::Draw(SDL_Texture* tex, SDL_Rect src, SDL_Rect dst, SDL_Rend
 void TextureManager::Draw(SDL_Texture* tex, SDL_Rect dst)
 {
     SDL_RenderCopyEx(Game::renderer, tex, NULL, &dst, NULL, NULL, SDL_FLIP_NONE);
+    // if(dst.x == 0 && dst.y == 0)
+    // {
+    //     cout << dst.w << " " <<  dst.h << endl;
+    // }
 }

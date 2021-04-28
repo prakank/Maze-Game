@@ -18,7 +18,7 @@ class TileComponent : public Component
         int tileId;
         
         string temp_path = "";
-        string color = "assets/GenerateTiles/Black";
+        string color = "assets/GenerateTiles/" + Game::Color;
 
         TileComponent() = default;
 
@@ -30,6 +30,11 @@ class TileComponent : public Component
                 .w = w*scaleBackground,
                 .h = h*scaleBackground,
             };
+
+            if(x == 0 && y == 0)
+            {
+                cout << w << " " << h << " " <<  scaleBackground << endl;
+            }
             
             tileId = id;
             position.x = tileRect.x;
@@ -37,38 +42,8 @@ class TileComponent : public Component
 
             temp_path = color + "_" + to_string(id) + ".png";
             texture = TextureManager::LoadTexture(temp_path.c_str());
-
-            // if(tileRect.x == 0)
-            // cout << tileRect.x << " " << tileRect.y << " " <<  id << " " << temp_path << "\n";
-            
-            // cout << temp_path << endl;
-            // strcpy(path, temp_path.c_str());
-            // path = temp_path;
-
-            // switch(tileId)
-            // {
-            //     case 0:
-            //         path = "assets/water.png";
-            //         break;
-            //     case 1:
-            //         path = "assets/dirt.png";
-            //         break;
-            //     case 2:
-            //         path = "assets/grass.png";
-            //         break;
-            //     default:
-            //         break;                
-            // }
-
         }
 
-        // void init() override
-        // {   
-        //     entity->addComponent<TransformComponent>((float)tileRect.x, (float)tileRect.y, tileRect.w, tileRect.h, 1);
-        //     transform = &entity->getComponent<TransformComponent>();
-        //     entity->addComponent<SpriteComponent>(temp_path.c_str());
-        //     sprite = &entity->getComponent<SpriteComponent>();
-        // }
 
         void update() override
         {

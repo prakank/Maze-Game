@@ -1,11 +1,12 @@
 #include "game.hpp"
 #include "TextureManager.hpp"
-#include "GameObject.hpp"
 #include "game.cpp"
-#include "GameObject.cpp"
+// #include "GameObject.hpp"
+// #include "GameObject.cpp"
 #include "TextureManager.cpp"
 #include "ECS/Components.hpp"
 #include "Vector2D.hpp"
+#include "Constants.hpp"
 
 using namespace std;
 
@@ -16,13 +17,13 @@ int main(int argc, char* argv[]){
      
     game = new Game();
 
-    const int FPS = 60;
+    const int FPS = FRAMES_PER_SECOND;
     const int FrameDelay = 1000/FPS;
 
     Uint32 frameStart;
     int frameTime;
     
-    game -> init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false);
+    game -> init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, false);
 
     while(game -> running()){
 

@@ -7,20 +7,26 @@
 #include "Collision.cpp"
 #include "MazeGeneration_DFS/MazeGeneration.cpp"
 #include "ECS/EntityComponentSystem.cpp"
+#include "Constants.hpp"
 
 // GameObject* player = NULL;
 // GameObject* enemy = NULL;
 
-// Map* backgroundMap = NULL;
+// Map* backgroundMap = NULL;   
+
 
 MazeGeneration* MazeGenerator;
 
 SDL_Renderer* Game::renderer = NULL;
 SDL_Event Game::event;
 
-SDL_Rect Game::camera = {0, 0, 800, 640};
+SDL_Rect Game::camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
 bool Game::isRunning = false;
+int Game::RowsToSkip = ROWS_TO_SKIP;
+string Game::Color = BACKGROUND_COLOR;
+int mapScale    = OVERALL_SCALE;
+int windowScale = WINDOW_SCALE;
 
 std::vector<ColliderComponent*> Game::colliders;
 
@@ -28,7 +34,7 @@ Manager manager;
 auto& player(manager.addEntity());
 auto& wall(manager.addEntity());
 
-int scaleBackground = 4;
+
 
 enum groupLabels : size_t
 {
@@ -37,11 +43,6 @@ enum groupLabels : size_t
     groupEnemies,
     groupColliders
 };
-
-// auto& tile0(manager.addEntity());
-// auto& tile1(manager.addEntity());
-// auto& tile2(manager.addEntity());
-
 
 auto& tiles(manager.getGroup(groupMap));
 auto& players(manager.getGroup(groupPlayers));
@@ -81,18 +82,14 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         MazeGenerator = new MazeGeneration();
         MazeGenerator -> MazeGenerator();
 
-        Map::LoadMap("assets/Maze.txt", 20, 25);
+        Map::LoadMap("assets/Maze.txt", MAZE_ROWS, MAZE_COLUMNS);
 
-        player.addComponent<TransformComponent>(scaleBackground);
-        player.addComponent<SpriteComponent>("assets/player.png", false);
+        player.addComponent<TransformComponent>(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, DEFAULT_IMAGE_SIZE,
+                                                 DEFAULT_IMAGE_SIZE, mapScale);
+        player.addComponent<SpriteComponent>("assets/player.png", ANIMATION);
         player.addComponent<KeyboardController>();
         player.addComponent<ColliderComponent>("Player");
         player.addGroup(groupPlayers);
-
-        // wall.addComponent<TransformComponent>(300.0f,300.0f, 300, 20, 1);
-        // wall.addComponent<SpriteComponent>("assets/dirt.png");
-        // wall.addComponent<ColliderComponent>("wall");
-        // wall.addGroup(groupMap);
         
     }
     Game::isRunning = true;
@@ -118,13 +115,13 @@ void Game::update(){
     manager.refresh();
     manager.update();
 
-    camera.x = player.getComponent<TransformComponent>().position.x - 400;
-    camera.y = player.getComponent<TransformComponent>().position.y - 320;
+    camera.x = player.getComponent<TransformComponent>().position.x - SCREEN_WIDTH/2;
+    camera.y = player.getComponent<TransformComponent>().position.y - SCREEN_HEIGHT/2;
 
     camera.x = max(camera.x,0);
     camera.y = max(camera.y,0);
-    camera.x = min(camera.x, camera.w * ( scaleBackground - 1 ) );
-    camera.y = min(camera.y, camera.h * ( scaleBackground - 1 ) );
+    camera.x = min(camera.x, camera.w * ( mapScale / windowScale - 1 ) );
+    camera.y = min(camera.y, camera.h * ( mapScale / windowScale - 1 ) );
 
     // Vector2D pVel = player.getComponent<TransformComponent>().velocity;
     // int pSpeed    = player.getComponent<TransformComponent>().speed;  
@@ -201,7 +198,7 @@ void Game::clean(){
 void Game::AddTile(int id, int x, int y)
 {
     auto& tile(manager.addEntity());
-    tile.addComponent<TileComponent>(x, y, 32, 32, id, scaleBackground);
+    tile.addComponent<TileComponent>(x, y, DEFAULT_IMAGE_SIZE, DEFAULT_IMAGE_SIZE, id, mapScale);
     // tile.addComponent<ColliderComponent>("Tiles");
     tile.addGroup(groupMap);
     // cout << id << "\n";

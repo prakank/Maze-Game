@@ -4,6 +4,7 @@
 #include "Components.hpp"
 #include "../Vector2D.hpp"
 #include "../game.hpp"
+#include "../Constants.hpp"
 
 class TransformComponent : public Component{
 
@@ -11,10 +12,10 @@ class TransformComponent : public Component{
 
         Vector2D position;
         Vector2D velocity;
-        int speed = 5;
+        int speed = PLAYER_SPEED;
 
         int height = 32;
-        int width = 32;
+        int width  = 32; 
         float scale = 1;
 
         TransformComponent()
@@ -24,8 +25,8 @@ class TransformComponent : public Component{
 
         TransformComponent(float s)
         {
-            position.x = 400; // Starting with centre of the screen
-            position.y = 320;
+            position.x = SCREEN_WIDTH/2; // Starting with centre of the screen
+            position.y = SCREEN_HEIGHT/2;
             scale = s;
         }
 
@@ -37,8 +38,8 @@ class TransformComponent : public Component{
         
         TransformComponent(float x, float y, int w, int h, float s)
         {
-            position.x = y;
-            position.y = x;
+            position.x = x;
+            position.y = y;
             width = w;
             height = h;
             scale = s;
@@ -57,8 +58,8 @@ class TransformComponent : public Component{
             position.x = max(position.x,0.0f);
             position.y = max(position.y,0.0f);
 
-            position.x = min(position.x, static_cast<float>(Game::camera.x + Game::camera.w - width *scale  ) );
-            position.y = min(position.y, static_cast<float>(Game::camera.y + Game::camera.h - height*scale ) );
+            position.x = min(position.x, static_cast<float>(Game::camera.x + Game::camera.w - width  * scale  ) );
+            position.y = min(position.y, static_cast<float>(Game::camera.y + Game::camera.h - height * scale ) );
         }
 
 };

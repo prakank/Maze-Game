@@ -1,5 +1,6 @@
 #include "Map.hpp"
 #include "game.hpp"
+#include "Constants.hpp"
 #include <fstream>
 #include<boost/algorithm/string.hpp>
 #include<boost/format.hpp> 
@@ -32,7 +33,7 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
         for(int y = 0; y < sizeY; y++){
             
             tile = MapTileArray[x][y];
-            Game::AddTile(tile, x*32, y*32);
+            Game::AddTile(tile, x * DEFAULT_IMAGE_SIZE, y * DEFAULT_IMAGE_SIZE);
             // cout << tile << " ";
         }
 

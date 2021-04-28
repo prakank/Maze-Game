@@ -5,6 +5,7 @@
 #include "../game.hpp"
 #include "EntityComponentSystem.hpp"
 #include "TransformComponent.hpp"
+#include "../Constants.hpp"
 
 class KeyboardController : public Component
 {
@@ -28,7 +29,7 @@ class KeyboardController : public Component
                 {
                     case SDLK_w:
                     case SDLK_UP:
-                        transform->velocity.y = -1;
+                        transform->velocity.y = REVERSE_DIRECTION_VELOCITY;
                         sprite->Play("Idle");
                         sprite->RotateDegrees = 0;
                         // sprite->spriteFlip = SDL_FLIP_VERTICAL;
@@ -36,7 +37,7 @@ class KeyboardController : public Component
 
                     case SDLK_a:
                     case SDLK_LEFT:
-                        transform->velocity.x = -1;
+                        transform->velocity.x = REVERSE_DIRECTION_VELOCITY;
                         sprite->Play("Idle");
                         sprite->RotateDegrees = 270;
                         // sprite->spriteFlip = SDL_FLIP_HORIZONTAL;                        
@@ -44,14 +45,14 @@ class KeyboardController : public Component
 
                     case SDLK_d:
                     case SDLK_RIGHT:
-                        transform->velocity.x = 1;
+                        transform->velocity.x = SAME_DIRECTION_VELOCITY;
                         sprite->Play("Idle");
                         sprite->RotateDegrees = 90;
                         break;
 
                     case SDLK_s:
                     case SDLK_DOWN:
-                        transform->velocity.y = 1;
+                        transform->velocity.y = SAME_DIRECTION_VELOCITY;
                         sprite->Play("Idle");
                         sprite->RotateDegrees = 180;
                         break;
@@ -70,27 +71,27 @@ class KeyboardController : public Component
                 {
                     case SDLK_w:
                     case SDLK_UP:
-                        transform->velocity.y = 0;
+                        transform->velocity.y = ZERO_VELOCITY;
                         sprite->Play("Idle");
                         // sprite->spriteFlip = SDL_FLIP_NONE;
                         break;
 
                     case SDLK_a:
                     case SDLK_LEFT:
-                        transform->velocity.x = 0;
+                        transform->velocity.x = ZERO_VELOCITY;
                         sprite->Play("Idle");
                         sprite->spriteFlip = SDL_FLIP_NONE;
                         break;
 
                     case SDLK_d:
                     case SDLK_RIGHT:
-                        transform->velocity.x = 0;
+                        transform->velocity.x = ZERO_VELOCITY;
                         sprite->Play("Idle");
                         break;
 
                     case SDLK_s:
                     case SDLK_DOWN:
-                        transform->velocity.y = 0;
+                        transform->velocity.y = ZERO_VELOCITY;
                         sprite->Play("Idle");
                         break;
 

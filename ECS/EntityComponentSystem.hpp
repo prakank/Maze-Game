@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <bitset>
 #include <array>
+#include "../Constants.hpp"
 
 using namespace std;
 
@@ -40,15 +41,20 @@ template <typename T> inline ComponentID getComponentTypeID() noexcept{
 // Even if the function is called multiple times, space for the static variable is allocated only once and the value of variable in the previous call gets carried through the next function call. 
 
 
-// Similar to const, difference being that we can use constexpr for any datatype ( including string, functions and classes )
-constexpr size_t maxComponents = 32; 
-constexpr size_t maxGroups = 32;
+// Similar to const, difference being that we can use constexpr for any datatype ( including string, functions and classes ) 
+
+// constexpr size_t maxGroups = 32;
+// constexpr size_t maxComponents = 32;
+
+// =================================================================================
+// maxGroups and maxComponents are added to Constants.hpp file
+// =================================================================================
 
 // using bitset library improves the efficiency ( Demerit being, size of array should be know during compile time)
-using ComponentBitset = bitset<maxComponents>;
-using ComponentArray = array<Component*, maxComponents>;
+using ComponentBitset = bitset<MAX_COMPONENTS>;
+using ComponentArray = array<Component*, MAX_COMPONENTS>;
 
-using GroupBitset = bitset<maxGroups>;
+using GroupBitset = bitset<MAX_GROUPS>;
 
 class Component
 {
@@ -156,7 +162,7 @@ class Manager
 {
     private:
         vector< unique_ptr<Entity> > entities;
-        array < vector<Entity*>, maxGroups > groupedEntites;
+        array < vector<Entity*>, MAX_GROUPS > groupedEntites;
 
     public:
         void update()
@@ -170,7 +176,7 @@ class Manager
         void refresh()
         {   
 
-            for(unsigned int i = 0; i< maxGroups; i++)
+            for(unsigned int i = 0; i< MAX_GROUPS; i++)
             {
                 groupedEntites[i].erase( remove_if( begin(groupedEntites[i]), end(groupedEntites[i]),
                 [i](Entity* mEntity)
