@@ -1,0 +1,22 @@
+Important topics for C++
+
+size_t
+fork
+constexpr
+bitset
+templates
+virtual function
+inline function
+auto_ptr, unique_ptr, shared_ptr and weak_ptr
+"using" keyword
+emplace_back
+std::move
+std::end
+
+
+        template<typename T, typename... TArgs > T& 
+        addComponent(TArgs&&... mArgs)
+
+std::forward
+
+lvalue and rvalue
