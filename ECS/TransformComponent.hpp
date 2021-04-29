@@ -5,6 +5,7 @@
 #include "../Vector2D.hpp"
 #include "../game.hpp"
 #include "../Constants.hpp"
+// #include "SpriteComponent.hpp"
 
 class TransformComponent : public Component{
 
@@ -17,6 +18,9 @@ class TransformComponent : public Component{
         int height = 32;
         int width  = 32; 
         float scale = 1;
+
+        int dstWidth;
+        int dstHeight;
 
         TransformComponent()
         {
@@ -48,6 +52,8 @@ class TransformComponent : public Component{
         void init() override
         {
             velocity.Zero();
+            dstWidth = (width - ROWS_TO_SKIP) * scale;
+            dstHeight = (height - ROWS_TO_SKIP) * scale;
         }
 
         void update() override
@@ -55,11 +61,13 @@ class TransformComponent : public Component{
             position.x += velocity.x * speed;
             position.y += velocity.y * speed;
 
-            position.x = max(position.x,0.0f);
-            position.y = max(position.y,0.0f);
+            position.x = max(position.x,(ROWS_TO_SKIP/2) * scale);
+            position.y = max(position.y,(ROWS_TO_SKIP/2) * scale);
 
-            position.x = min(position.x, static_cast<float>(Game::camera.x + Game::camera.w - width  * scale  ) );
-            position.y = min(position.y, static_cast<float>(Game::camera.y + Game::camera.h - height * scale ) );
+            // player_dstRect = entity->getComponent<SpriteComponent>().dstRect;
+
+            position.x = min(position.x, static_cast<float>(Game::camera.x + Game::camera.w - dstWidth  - (ROWS_TO_SKIP/2) * scale ) );
+            position.y = min(position.y, static_cast<float>(Game::camera.y + Game::camera.h - dstHeight - (ROWS_TO_SKIP/2) * scale ) );
         }
 
 };

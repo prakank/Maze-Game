@@ -15,8 +15,6 @@ class SpriteComponent : public Component
         TransformComponent *transform;
         SDL_Texture* texture = NULL;
         
-        SDL_Rect srcRect, dstRect;
-        
         bool animate = false;
         int frames = 4;
         int speed = ANIMATION_SPEED;
@@ -24,6 +22,8 @@ class SpriteComponent : public Component
     public:        
 
         int animIndex = 0;
+
+        SDL_Rect srcRect, dstRect;
 
         std::map<const char*, Animation> animations;
         
