@@ -6,3 +6,7 @@ Add Collision with Tiles (Don't allow tank to jump over lines)
 
 Roation of Tank with Mouse
 Firing bullets on pressing spacebar or Left Mouse Button
+
+
+Need to integrate "GenerateTiles/Tiles.py" with cpp file to generate tiles using constant ROWS_TO_SKIP_PYTHON
+(call python file from c++)

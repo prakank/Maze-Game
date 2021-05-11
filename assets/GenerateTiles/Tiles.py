@@ -4,7 +4,7 @@ from PIL import Image as im
 
 TileWidth = 32
 TileHeight = 32
-RowsTocolor = 3;
+RowsTocolor = 2;
 
 L = np.zeros((TileWidth, TileHeight))
 

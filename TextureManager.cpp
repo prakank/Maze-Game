@@ -15,9 +15,9 @@ void TextureManager::Draw(SDL_Texture* tex, SDL_Rect src, SDL_Rect dst, SDL_Rend
     SDL_RenderCopyEx(Game::renderer, tex, &src, &dst, RotateDegrees, NULL, flip);
 }
     
-void TextureManager::Draw(SDL_Texture* tex, SDL_Rect dst)
+void TextureManager::Draw(SDL_Texture* tex, SDL_Rect src, SDL_Rect dst)
 {
-    SDL_RenderCopyEx(Game::renderer, tex, NULL, &dst, NULL, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(Game::renderer, tex, &src, &dst, NULL, NULL, SDL_FLIP_NONE);
     // if(dst.x == 0 && dst.y == 0)
     // {
     //     cout << dst.w << " " <<  dst.h << endl;

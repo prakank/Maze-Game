@@ -132,17 +132,19 @@ void Game::update(){
     //     t->getComponent<TileComponent>().tileRect.y += -(pVel.y * pSpeed);
     // }
 
-    // for(auto cc: colliders)
-    // {
-    //     // if(*cc == player.getComponent<ColliderComponent>())continue;
-    //     if(!Collision::EqualColliderComponent(player.getComponent<ColliderComponent>(), *cc))
-    //     if(Collision::AABB(player.getComponent<ColliderComponent>(), *cc))
-    //     {
-    //         player.getComponent<TransformComponent>().velocity * -1;
-    //         // player.getComponent<TransformComponent>().scale = 1;
-    //         cout << "COLLISION " <<  collision_count++ << "\n";
-    //     }
-    // }
+    for(auto cc: colliders)
+    {
+        // if(*cc == player.getComponent<ColliderComponent>())continue;
+        if(!Collision::EqualColliderComponent(player.getComponent<ColliderComponent>(), *cc))
+        {
+            if(Collision::AABB(player.getComponent<ColliderComponent>(), *cc))
+            {
+                player.getComponent<TransformComponent>().velocity * -1;
+                // player.getComponent<TransformComponent>().scale = 1;
+                cout << "COLLISION " <<  collision_count++ << "\n\n";
+            }
+        }
+    }
 
     // if( Collision::AABB(player.getComponent<ColliderComponent>().collider, 
     //                     wall.getComponent<ColliderComponent>().collider ) )
@@ -197,9 +199,47 @@ void Game::clean(){
 
 void Game::AddTile(int id, int x, int y)
 {
-    auto& tile(manager.addEntity());
-    tile.addComponent<TileComponent>(x, y, DEFAULT_IMAGE_SIZE, DEFAULT_IMAGE_SIZE, id, mapScale);
-    // tile.addComponent<ColliderComponent>("Tiles");
-    tile.addGroup(groupMap);
-    // cout << id << "\n";
+    if(id == -1)
+    {
+        auto& tile(manager.addEntity());
+        tile.addComponent<TileComponent>(x, y, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, id, mapScale);
+        // tile.addComponent<ColliderComponent>("Tiles");
+        tile.addGroup(groupMap);
+        // cout << id << "\n";
+    }
+    else
+    {
+        if(id == 2 || id == 5 || id == 8 || id == 9 || (id >= 11  && id != 13))
+        {
+            auto& tile1(manager.addEntity());
+            tile1.addComponent<TileComponent>(x, y + DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE, 0, DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, id, mapScale); //    |
+            tile1.addComponent<ColliderComponent>("Tiles1");
+            tile1.addGroup(groupMap);
+        }
+
+        if(id == 3 || id == 6 || id == 8 || id == 10 || id == 11 || id >=13)
+        {
+            auto& tile2(manager.addEntity());
+            tile2.addComponent<TileComponent>(x + DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, y, DEFAULT_IMAGE_SIZE, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, 0, id, mapScale);//    __
+            tile2.addComponent<ColliderComponent>("Tiles2");
+            tile2.addGroup(groupMap);
+        }
+
+        if(id == 4 || id == 7 || id == 9 || (id >= 10 && id != 11))
+        {
+            auto& tile3(manager.addEntity());
+            tile3.addComponent<TileComponent>(x, y, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE, 0, 0, id, mapScale); // |
+            tile3.addComponent<ColliderComponent>("Tiles3");
+            tile3.addGroup(groupMap);
+        }
+
+        if(id == 1 || id == 5 || id == 6 || id == 7 || (id >= 11 && id != 14))
+        {
+            auto& tile4(manager.addEntity());                                                              // __
+            tile4.addComponent<TileComponent>(x, y, DEFAULT_IMAGE_SIZE, ROWS_TO_SKIP_PYTHON, 0, 0, id, mapScale);// 
+            tile4.addComponent<ColliderComponent>("Tiles4");
+            tile4.addGroup(groupMap);
+        }
+    }
+    
 }

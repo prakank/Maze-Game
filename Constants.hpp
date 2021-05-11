@@ -11,15 +11,18 @@
 // =================================================================================
         // --------------- game.hpp ---------------
 
-#define WINDOW_SCALE        3
-#define MAP_SCALE           1
+#define WINDOW_SCALE         3
+#define MAP_SCALE            1
+#define ROWS_TO_SKIP        14
+
+#define ROWS_TO_SKIP_PYTHON  2
+
+#define MAZE_ROWS            8
+#define MAZE_COLUMNS         8
+#define DEFAULT_IMAGE_SIZE  32      /* CHANGE ONLY IF TILE SIZE AND IMAGE SIZE IS NOT 32 */
+#define BACKGROUND_COLOR    "Black" // Supported Colors -> "White" and "Black"
+#define ANIMATION           false
 #define OVERALL_SCALE       MAP_SCALE * WINDOW_SCALE
-#define ROWS_TO_SKIP       10
-#define MAZE_ROWS           8
-#define MAZE_COLUMNS        8
-#define DEFAULT_IMAGE_SIZE 32    /* CHANGE ONLY IF TILE SIZE AND IMAGE SIZE IS NOT 32 */
-#define BACKGROUND_COLOR "White" // Supported Colors -> "White" and "Black"
-#define ANIMATION        false
 // =================================================================================
 
 

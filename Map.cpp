@@ -5,13 +5,14 @@
 #include<boost/algorithm/string.hpp>
 #include<boost/format.hpp> 
 
-Map::Map(){
-
+Map::Map()
+{
+    BackGroundColorMap["White"] = "Black";
+    BackGroundColorMap["Black"] = "White";
 }
 
 Map::~Map()
-{
-}
+{}
 
 void Map::LoadMap(std::string path, int sizeX, int sizeY)
 {
@@ -29,14 +30,16 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
         t++;
     }
 
-    for(int x = 0; x < sizeX; x++){
-        for(int y = 0; y < sizeY; y++){
-            
+    Game::AddTile(-1, 0, 0);
+
+    for(int x = 0; x < sizeX; x++)
+    {
+        for(int y = 0; y < sizeY; y++)
+        {            
             tile = MapTileArray[x][y];
             Game::AddTile(tile, x * DEFAULT_IMAGE_SIZE, y * DEFAULT_IMAGE_SIZE);
             // cout << tile << " ";
         }
-
         // cout << "\n";
     }
 
