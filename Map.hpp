@@ -2,6 +2,7 @@
 #define MAP_H
 
 #include <SDL2/SDL.h>
+#include <map>
 
 class Map{
 

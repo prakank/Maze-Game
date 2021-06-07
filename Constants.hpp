@@ -11,14 +11,14 @@
 // =================================================================================
         // --------------- game.hpp ---------------
 
-#define WINDOW_SCALE         3
+#define WINDOW_SCALE         1
 #define MAP_SCALE            1
 #define ROWS_TO_SKIP        14
 
 #define ROWS_TO_SKIP_PYTHON  2
 
-#define MAZE_ROWS            8
-#define MAZE_COLUMNS         8
+#define MAZE_ROWS            20     //must be atleast 3
+#define MAZE_COLUMNS         25   //must be atleast 3
 #define DEFAULT_IMAGE_SIZE  32      /* CHANGE ONLY IF TILE SIZE AND IMAGE SIZE IS NOT 32 */
 #define BACKGROUND_COLOR    "Black" // Supported Colors -> "White" and "Black"
 #define ANIMATION           false
@@ -78,6 +78,12 @@ enum Velocity : int
 #define FRAMES_PER_SECOND 60
 #define WINDOW_WIDTH      SCREEN_WIDTH
 #define WINDOW_HEIGHT     SCREEN_HEIGHT
+
+// =================================================================================
+
+// =================================================================================
+        // --------------- Kruskal_Maze.hpp ---------------
+#define DEAD_END_REMOVAL 1            //value from 0 to 1
 
 // =================================================================================
 

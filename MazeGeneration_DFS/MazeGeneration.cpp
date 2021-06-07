@@ -1,17 +1,24 @@
 #include "MazeGeneration.hpp"
-#include <fstream>
 
-MazeGeneration::MazeGeneration()
+MazeGeneration::MazeGeneration(int seed)
 {
     for(int i=0 ; i < Rows; i++){
         for(int j=0; j < Columns; j++){
             Visited[i][j] = 0;
-            Neighbours[i][j] = "";
-            Neighbours[i][j] = "";
+            for(int k = 0;k<4;k++){
+                Neighbours[i][j][k] = false;
+            }
         }
     }
+
+    random_seed = seed;
+
+    Generate();
+    GenerateTileMap();
+    WriteToText();
+
     
-}
+};
 
 void MazeGeneration::PushIntoArray(pii x, pii y)
 {
@@ -23,17 +30,18 @@ void MazeGeneration::PushIntoArray(pii x, pii y)
     // R will be Right Neighbour
 
 
-    if(y.ff == RowNumber+1)         Neighbours[x.ff][x.ss] += "D";
-    else if(y.ff == RowNumber-1)    Neighbours[y.ff][y.ss] += "D";
-    else if(y.ss == ColumnNumber+1) Neighbours[x.ff][x.ss] += "R";
-    else                            Neighbours[y.ff][y.ss] += "R";
+    if(y.ff == x.ff+1 && y.ss == x.ss)         {Neighbours[x.ff][x.ss][2] = true; Neighbours[y.ff][y.ss][0] = true;}
+    else if(y.ff == x.ff-1 && y.ss == x.ss)    {Neighbours[x.ff][x.ss][0] = true; Neighbours[y.ff][y.ss][2] = true;}
+    else if(y.ss == x.ss+1 && y.ff == x.ff)    {Neighbours[x.ff][x.ss][3] = true; Neighbours[y.ff][y.ss][1] = true;}
+    else if(y.ss == x.ss-1 && y.ff == x.ff)    {Neighbours[x.ff][x.ss][1] = true; Neighbours[y.ff][y.ss][3] = true;}
 }
 
 void MazeGeneration::Generate()
 {
-    srand(time(0));
+    srand(random_seed);
     startX = rand() % Rows;
     startY = rand() % Columns;
+    cout<<"X, Y"<<startX<<" "<<startY<<"\n";
     cells.push(mp(startX,startY));
     Visited[startX][startY] = 1;
     int cnt = 1;
@@ -58,6 +66,7 @@ void MazeGeneration::Generate()
         }
         pii y = temp[rand() % temp.size()];
         Visited[y.ff][y.ss] = 1;
+        cout<<"Point "<<y.ff<<" "<<y.ss<<"\n";
         cells.push(y);
         PushIntoArray(x,y);        
         cnt++;
@@ -65,11 +74,11 @@ void MazeGeneration::Generate()
 
 }
 
-bool MazeGeneration::ContainsChar(int i, int j, std::string s)
+/*bool MazeGeneration::ContainsChar(int i, int j, std::string s)
 {
     if(Neighbours[i][j].size() == 2)return true;
     return Neighbours[i][j] == s;
-}
+}*/
 
 // Will use Visited array to store the TileMap
 void MazeGeneration::GenerateTileMap()
@@ -79,69 +88,7 @@ void MazeGeneration::GenerateTileMap()
     for(int i=0; i < Rows; i++){
         for(int j=0; j < Columns; j++){
             
-            if(Neighbours[i][j].size() == 2 && 
-               i > 0 && ContainsChar(i-1,j,"D") &&
-               j > 0 && ContainsChar(i,j-1,"R") 
-            )tileId = 0;
-            
-            else if(Neighbours[i][j].size() == 2 &&
-                    j > 0 && ContainsChar(i,j-1,"R")
-                )tileId = 1;
-            
-            else if(i > 0 && ContainsChar(i-1,j,"D") &&
-                    j > 0 && ContainsChar(i,j-1,"R") &&
-                    Neighbours[i][j] == "D"
-               ) tileId = 2;
-
-            else if(i > 0 && ContainsChar(i-1,j,"D") &&
-                    j > 0 && ContainsChar(i,j-1,"R") &&
-                    Neighbours[i][j] == "R"
-               ) tileId = 3;
-
-            else if(Neighbours[i][j].size() == 2 &&
-                    i > 0 && ContainsChar(i-1,j,"D")
-                )tileId = 4;
-
-            else if(Neighbours[i][j] == "D" &&
-                    j > 0 && ContainsChar(i,j-1,"R")
-                )tileId = 5;
-            
-            else if(Neighbours[i][j] == "R" &&
-                    j > 0 && ContainsChar(i,j-1,"R")
-                )tileId = 6;
-
-            else if(Neighbours[i][j].size() == 2)
-                 tileId = 7;
-
-            else if(i > 0 && ContainsChar(i-1,j,"D") &&
-                    j > 0 && ContainsChar(i,j-1,"R") 
-                )tileId = 8;
-
-            else if(Neighbours[i][j] == "D" &&
-                    i > 0 && ContainsChar(i-1,j,"D")
-                )tileId = 9;
-
-            else if(Neighbours[i][j] == "R" &&
-                    i > 0 && ContainsChar(i-1,j,"D")
-                )tileId = 10;
-
-            else if(j > 0 && ContainsChar(i,j-1,"R")
-                )tileId = 11;
-            
-            else if(Neighbours[i][j] == "D")
-                 tileId = 12;
-            
-            else if(Neighbours[i][j] == "R")
-                 tileId = 13;
-
-            else if( i > 0 && ContainsChar(i-1,j,"D") )
-                 tileId = 14;
-
-            else 
-                {
-                    tileId = 15;
-                    std::cout << "ERROR\n";
-                }
+            tileId = 8*Neighbours[i][j][0] + 4*Neighbours[i][j][1] + 2*Neighbours[i][j][2] + Neighbours[i][j][3];
             Visited[i][j] = tileId;
         }
     }
@@ -149,13 +96,16 @@ void MazeGeneration::GenerateTileMap()
 
 void MazeGeneration::WriteToText()
 {
-    std::string filename = "assets/Maze.txt";
+    std::string filename = "Maze_txtfile.txt";
     std::ofstream output(filename);
-    
+    if(output.is_open()) cout<<"\n\nJa\n\n";
+    else cout<<"\n\nNein\n\n";
+
+
     for(int i=0; i< Rows; i++){
         for(int j=0;j < Columns; j++){
             output << Visited[i][j];
-            if(j == Columns-1)output << "\n";
+            if(j == Columns-1) output << "\n";
             else output << ",";
         }
     }
@@ -164,9 +114,7 @@ void MazeGeneration::WriteToText()
 
 void MazeGeneration::MazeGenerator()
 {
-    Generate();
-    GenerateTileMap();
-    WriteToText();
+    
     // std::cout << "Hey";
 }
 

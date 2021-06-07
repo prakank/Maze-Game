@@ -1,3 +1,5 @@
+# pragma once
+#include "MazeGeneration_DFS/Kruskal_Maze.cpp"
 #include "game.hpp"
 #include "TextureManager.hpp"
 #include "Map.cpp"
@@ -15,7 +17,7 @@
 // Map* backgroundMap = NULL;   
 
 
-MazeGeneration* MazeGenerator;
+MazeGenerator* Maze;
 
 SDL_Renderer* Game::renderer = NULL;
 SDL_Event Game::event;
@@ -69,6 +71,13 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
             Game::isRunning = false;
             return;
         }
+        SDL_SetWindowResizable(window, SDL_TRUE);
+        
+        if( window == NULL)
+        {printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+        Game::isRunning = false;
+        return;}
+        
         renderer = SDL_CreateRenderer(window, -1, 0);
         if(renderer == NULL){
             printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
@@ -79,10 +88,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         }
         // backgroundMap = new Map();
-        MazeGenerator = new MazeGeneration();
-        MazeGenerator -> MazeGenerator();
+        Maze = new MazeGenerator(54);
 
-        Map::LoadMap("assets/Maze.txt", MAZE_ROWS, MAZE_COLUMNS);
+        Map::LoadMap("Kruskal.txt", MAZE_ROWS, MAZE_COLUMNS);
 
         player.addComponent<TransformComponent>(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, DEFAULT_IMAGE_SIZE,
                                                  DEFAULT_IMAGE_SIZE, mapScale);
@@ -117,6 +125,7 @@ void Game::update(){
 
     camera.x = player.getComponent<TransformComponent>().position.x - SCREEN_WIDTH/2;
     camera.y = player.getComponent<TransformComponent>().position.y - SCREEN_HEIGHT/2;
+    //cout<<"Player X: "<<player.getComponent<TransformComponent>().position.x<<"Player Y: "<<player.getComponent<TransformComponent>().position.y<<"\n";
 
     camera.x = max(camera.x,0);
     camera.y = max(camera.y,0);
@@ -141,7 +150,7 @@ void Game::update(){
             {
                 player.getComponent<TransformComponent>().velocity * -1;
                 // player.getComponent<TransformComponent>().scale = 1;
-                cout << "COLLISION " <<  collision_count++ << "\n\n";
+                //cout << "COLLISION " <<  collision_count++ << "\n\n"; //HERE
             }
         }
     }
@@ -197,46 +206,47 @@ void Game::clean(){
 }
 
 
-void Game::AddTile(int id, int x, int y)
+void Game::AddTile(int id, int row, int col)
 {
     if(id == -1)
     {
         auto& tile(manager.addEntity());
-        tile.addComponent<TileComponent>(x, y, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, id, mapScale);
+        tile.addComponent<TileComponent>(row, col, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, id, mapScale);
         // tile.addComponent<ColliderComponent>("Tiles");
         tile.addGroup(groupMap);
         // cout << id << "\n";
     }
     else
     {
-        if(id == 2 || id == 5 || id == 8 || id == 9 || (id >= 11  && id != 13))
+        
+        if(id%2 == 1)
         {
             auto& tile1(manager.addEntity());
-            tile1.addComponent<TileComponent>(x, y + DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE, 0, DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, id, mapScale); //    |
+            tile1.addComponent<TileComponent>(row, col + DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE, 0, DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, id, mapScale); //    |
             tile1.addComponent<ColliderComponent>("Tiles1");
             tile1.addGroup(groupMap);
         }
 
-        if(id == 3 || id == 6 || id == 8 || id == 10 || id == 11 || id >=13)
+        if(id%4 >= 2)
         {
             auto& tile2(manager.addEntity());
-            tile2.addComponent<TileComponent>(x + DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, y, DEFAULT_IMAGE_SIZE, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, 0, id, mapScale);//    __
+            tile2.addComponent<TileComponent>(row + DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, col, DEFAULT_IMAGE_SIZE, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, 0, id, mapScale);//    __
             tile2.addComponent<ColliderComponent>("Tiles2");
             tile2.addGroup(groupMap);
         }
 
-        if(id == 4 || id == 7 || id == 9 || (id >= 10 && id != 11))
+        if(id%16 >= 8)
         {
             auto& tile3(manager.addEntity());
-            tile3.addComponent<TileComponent>(x, y, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE, 0, 0, id, mapScale); // |
+            tile3.addComponent<TileComponent>(row, col, DEFAULT_IMAGE_SIZE, ROWS_TO_SKIP_PYTHON, 0, 0, id, mapScale); // |
             tile3.addComponent<ColliderComponent>("Tiles3");
             tile3.addGroup(groupMap);
         }
 
-        if(id == 1 || id == 5 || id == 6 || id == 7 || (id >= 11 && id != 14))
+        if(id%8 >= 4)
         {
             auto& tile4(manager.addEntity());                                                              // __
-            tile4.addComponent<TileComponent>(x, y, DEFAULT_IMAGE_SIZE, ROWS_TO_SKIP_PYTHON, 0, 0, id, mapScale);// 
+            tile4.addComponent<TileComponent>(row, col, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE, 0, 0, id, mapScale);// 
             tile4.addComponent<ColliderComponent>("Tiles4");
             tile4.addGroup(groupMap);
         }

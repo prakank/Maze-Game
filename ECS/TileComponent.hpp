@@ -66,7 +66,7 @@ class TileComponent : public Component
             position.y = tileRect.y;
             
             if(tileId == -1) temp_path = color + "Background.png";
-            else temp_path = color + "_" + to_string(id) + ".png";            
+            else temp_path = color +  "2_" + to_string(id) + ".png";            
             
             texture = TextureManager::LoadTexture(temp_path.c_str());
         }

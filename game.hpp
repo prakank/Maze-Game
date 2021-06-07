@@ -1,5 +1,3 @@
-// #pragma once
-
 // Alternative for #pragma once
 #ifndef GAME_HPP  
 #define GAME_HPP
@@ -7,7 +5,8 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <bits/stdc++.h>
+#include <iostream>
+#include <cmath>
 #include <vector>
 
 class ColliderComponent;
