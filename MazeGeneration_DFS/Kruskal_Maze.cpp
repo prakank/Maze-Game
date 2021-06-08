@@ -1,12 +1,13 @@
 #pragma once
 #include <iostream>
-#include<algorithm>
-#include<random>
+#include <algorithm>
+#include <random>
 #include <vector>
 #include <stack>
 #include <string>
 #include <fstream>
-#include<cstddef>
+#include <cstddef>
+#include <memory>
 #include "../Constants.hpp"
 
 #define pii std::pair<int,int>
