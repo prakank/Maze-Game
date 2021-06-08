@@ -29,32 +29,32 @@ class KeyboardController : public Component
                 {
                     case SDLK_w:
                     case SDLK_UP:
-                        transform->velocity.y = REVERSE_DIRECTION_VELOCITY;
-                        sprite->Play("Idle");
-                        sprite->RotateDegrees = 0;
+                        transform->velocity.y = (-1)*PLAYER_VELOCITY;
+                        sprite->Play("Idle_U");
+                        //sprite->RotateDegrees = 0;
                         // sprite->spriteFlip = SDL_FLIP_VERTICAL;
                         break;
 
                     case SDLK_a:
                     case SDLK_LEFT:
-                        transform->velocity.x = REVERSE_DIRECTION_VELOCITY;
-                        sprite->Play("Idle");
-                        sprite->RotateDegrees = 270;
+                        transform->velocity.x = (-1)*PLAYER_VELOCITY;
+                        sprite->Play("Idle_L");
+                        //sprite->RotateDegrees = 270;
                         // sprite->spriteFlip = SDL_FLIP_HORIZONTAL;                        
                         break;
 
                     case SDLK_d:
                     case SDLK_RIGHT:
-                        transform->velocity.x = SAME_DIRECTION_VELOCITY;
-                        sprite->Play("Idle");
-                        sprite->RotateDegrees = 90;
+                        transform->velocity.x = PLAYER_VELOCITY;
+                        sprite->Play("Idle_R");
+                        //sprite->RotateDegrees = 90;
                         break;
 
                     case SDLK_s:
                     case SDLK_DOWN:
-                        transform->velocity.y = SAME_DIRECTION_VELOCITY;
-                        sprite->Play("Idle");
-                        sprite->RotateDegrees = 180;
+                        transform->velocity.y = PLAYER_VELOCITY;
+                        sprite->Play("Idle_D");
+                        //sprite->RotateDegrees = 180;
                         break;
                     case SDLK_ESCAPE:
                         Game::isRunning = false;
@@ -71,28 +71,28 @@ class KeyboardController : public Component
                 {
                     case SDLK_w:
                     case SDLK_UP:
-                        transform->velocity.y = ZERO_VELOCITY;
-                        sprite->Play("Idle");
+                        transform->velocity.y = 0;
+                        sprite->Play("Idle_U");
                         // sprite->spriteFlip = SDL_FLIP_NONE;
                         break;
 
                     case SDLK_a:
                     case SDLK_LEFT:
-                        transform->velocity.x = ZERO_VELOCITY;
-                        sprite->Play("Idle");
+                        transform->velocity.x = 0;
+                        sprite->Play("Idle_L");
                         sprite->spriteFlip = SDL_FLIP_NONE;
                         break;
 
                     case SDLK_d:
                     case SDLK_RIGHT:
-                        transform->velocity.x = ZERO_VELOCITY;
-                        sprite->Play("Idle");
+                        transform->velocity.x = 0;
+                        sprite->Play("Idle_R");
                         break;
 
                     case SDLK_s:
                     case SDLK_DOWN:
-                        transform->velocity.y = ZERO_VELOCITY;
-                        sprite->Play("Idle");
+                        transform->velocity.y = 0;
+                        sprite->Play("Idle_D");
                         break;
 
                     default:

@@ -69,7 +69,7 @@ class Component
 
 class Entity
 {
-    private:
+    protected:
         Manager& manager;
         bool active = true; // To check if current entity is Active or not
 
@@ -93,8 +93,11 @@ class Entity
         // Constructor
         Entity(Manager& mManager) : manager(mManager) {}
 
+        void init(){}
+
         void update()
         {
+            
             for(auto& c : components) c->update(); // Iterate over all the components linked to this Entity and Update them            
         }
 
@@ -214,6 +217,9 @@ class Manager
             entities.emplace_back(std::move(uPtr));
             return *e;
         }
+
+
+
 };
 
 #endif

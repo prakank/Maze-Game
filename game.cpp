@@ -1,4 +1,5 @@
 # pragma once
+#include "Player.hpp"
 #include "MazeGeneration_DFS/Kruskal_Maze.cpp"
 #include "game.hpp"
 #include "TextureManager.hpp"
@@ -38,13 +39,6 @@ auto& wall(manager.addEntity());
 
 
 
-enum groupLabels : size_t
-{
-    groupMap,
-    groupPlayers,
-    groupEnemies,
-    groupColliders
-};
 
 auto& tiles(manager.getGroup(groupMap));
 auto& players(manager.getGroup(groupPlayers));
@@ -92,9 +86,17 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
         Map::LoadMap("Kruskal.txt", MAZE_ROWS, MAZE_COLUMNS);
 
-        player.addComponent<TransformComponent>(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, DEFAULT_IMAGE_SIZE,
-                                                 DEFAULT_IMAGE_SIZE, mapScale);
-        player.addComponent<SpriteComponent>("assets/player.png", ANIMATION);
+        //if(player.manager == manager)cout<<"player has component\n";
+
+        player.addComponent<TransformComponent>(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, DEFAULT_IMAGE_SIZE*2,
+                                                 DEFAULT_IMAGE_SIZE*2, mapScale);
+
+        map<string, Animation*> map1;
+        map1.insert(pair<string, Animation*>("Idle_U", new Animation(0, 1, 100, 0, 0)));
+        map1.insert(pair<string, Animation*>("Idle_L", new Animation(1, 1, 100, 0, 1)));
+        map1.insert(pair<string, Animation*>("Idle_D", new Animation(2, 1, 100, 0, 2)));
+        map1.insert(pair<string, Animation*>("Idle_R", new Animation(2, 1, 100, 0, 3)));
+        player.addComponent<SpriteComponent>("assets/spritesheets/character1_all.png", true, map1, "Idle_D");
         player.addComponent<KeyboardController>();
         player.addComponent<ColliderComponent>("Player");
         player.addGroup(groupPlayers);
@@ -182,7 +184,7 @@ void Game::update(){
 void Game::render(){
     SDL_RenderClear(renderer);    
     // backgroundMap->DrawMap();
-    // manager.draw();
+    //manager.draw();
     for(auto& t : tiles)
     {
         t->draw();
@@ -195,6 +197,7 @@ void Game::render(){
     {
         e->draw();
     }
+    
     SDL_RenderPresent(renderer);
 }
 

@@ -11,6 +11,14 @@
 // =================================================================================
         // --------------- game.hpp ---------------
 
+enum groupLabels : size_t
+{
+    groupMap,
+    groupPlayers,
+    groupEnemies,
+    groupColliders
+};
+
 #define WINDOW_SCALE         1
 #define MAP_SCALE            1
 #define ROWS_TO_SKIP        14
@@ -40,12 +48,7 @@
 // =================================================================================
         // --------------- KeyboardController.hpp ---------------
 
-enum Velocity : int
-{
-    REVERSE_DIRECTION_VELOCITY = -1,
-    SAME_DIRECTION_VELOCITY    =  1,
-    ZERO_VELOCITY              =  0
-};
+#define PLAYER_VELOCITY 1
 
 // =================================================================================
 

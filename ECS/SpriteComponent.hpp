@@ -22,35 +22,39 @@ class SpriteComponent : public Component
     public:        
 
         int animIndex = 0;
+        int animX = 0;
+        int animY = 0;
+        string animName = "Idle_D";
 
         SDL_Rect srcRect, dstRect;
 
-        std::map<const char*, Animation> animations;
+        std::map<string, Animation*> animations;
         
         SDL_RendererFlip spriteFlip = SDL_FLIP_NONE; 
         int RotateDegrees = 0;
 
         SpriteComponent() = default;
-        SpriteComponent(const char* path)
+        SpriteComponent(string path)
         {
             // texture = TextureManager::LoadTexture(path);
             setTex(path);
         }
 
-        SpriteComponent(const char* path, bool isAnimated)
+        SpriteComponent(string path, bool isAnimated, std::map<string, Animation*> anims, string start="Idle_D")
         {
-            animate = isAnimated;
-
-            Animation idle = Animation(0, FRAMES_FOR_IDLE,   ANIMATION_SPEED);
-            Animation move = Animation(1, FRAMES_FOR_MOTION, ANIMATION_SPEED);
-
-            animations.emplace("Idle", idle);
-            animations.emplace("Move", move);
-
-            Play("Idle");
-
-
             setTex(path);
+            animate = isAnimated;
+            animations = anims;
+
+            //Animation idle = Animation(0, FRAMES_FOR_IDLE,   ANIMATION_SPEED);
+            //Animation move = Animation(1, FRAMES_FOR_MOTION, ANIMATION_SPEED);
+
+            //animations.emplace("Idle", idle);
+            //animations.emplace("Move", move);
+
+            Play(start);
+
+
         }
 
         ~SpriteComponent()
@@ -58,8 +62,8 @@ class SpriteComponent : public Component
             SDL_DestroyTexture(texture);
         }
 
-        void setTex(const char* path){
-            texture = TextureManager::LoadTexture(path);
+        void setTex(string path){
+            texture = TextureManager::LoadTexture(path.c_str());
         }
 
         void init() override
@@ -75,16 +79,17 @@ class SpriteComponent : public Component
         {   
             if(animate)
             {
-                srcRect.x = srcRect.w * static_cast<int>( (SDL_GetTicks() / speed) % frames );
+                srcRect.x = srcRect.w*animX + srcRect.w * static_cast<int>( (SDL_GetTicks() / speed) % frames );
             }
 
-            srcRect.y = animIndex * transform->height;
+            srcRect.y = animY * srcRect.h;
 
             dstRect.x = static_cast<int>(transform->position.x) - Game::camera.x;
             dstRect.y = static_cast<int>(transform->position.y) - Game::camera.y;
-            dstRect.w = ( transform->width  - Game::RowsToSkip )* transform->scale;
-            dstRect.h = ( transform->height - Game::RowsToSkip )* transform->scale;
-
+            //dstRect.w = ( transform->width  - Game::RowsToSkip )* transform->scale;
+            //dstRect.h = ( transform->height - Game::RowsToSkip )* transform->scale;
+            dstRect.w = (transform->width)*transform->scale;
+            dstRect.h = (transform->height)*transform->scale;
             
             // cout << transform->width << " " << Game::RowsToSkip << " " << transform->scale << endl;
             // cout << dstRect.w << " " << dstRect.h << " " <<  transform->scale << "\n";
@@ -95,11 +100,15 @@ class SpriteComponent : public Component
             TextureManager::Draw(texture, srcRect, dstRect, spriteFlip, RotateDegrees);
         }
 
-        void Play(const char* animName)
+        void Play(string animName1)
         {
-            frames = animations[animName].frames;
-            speed = animations[animName].speed;
-            animIndex = animations[animName].index;
+            frames = animations[animName1]->frames;
+            speed = animations[animName1]->speed;
+            animIndex = animations[animName1]->index;
+            animX = animations[animName1]->x;
+            animY = animations[animName1]->y;
+            
+            animName = animName1;
         }
 
 };
