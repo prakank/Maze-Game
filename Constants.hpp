@@ -67,7 +67,7 @@ enum groupLabels : size_t
 // =================================================================================
         // --------------- TransformComponent.hpp ---------------
 
-#define PLAYER_SPEED    5
+#define PLAYER_SPEED    3
 #define SCREEN_WIDTH  MAZE_COLUMNS * DEFAULT_IMAGE_SIZE * WINDOW_SCALE
 #define SCREEN_HEIGHT MAZE_ROWS * DEFAULT_IMAGE_SIZE    * WINDOW_SCALE
 // #define SCREEN_WIDTH WINDOW_WIDTH

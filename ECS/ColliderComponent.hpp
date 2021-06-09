@@ -70,10 +70,19 @@ class ColliderComponent : public Component
         {
             collider.x = static_cast<int>(transform->position.x);
             collider.y = static_cast<int>(transform->position.y);
-            // collider.w = static_cast<int>(transform->width * transform->scale);
-            // collider.h = static_cast<int>(transform->height * transform->scale);
-            collider.w = static_cast<int>(transform->dstWidth);
-            collider.h = static_cast<int>(transform->dstHeight);
+            collider.w = static_cast<int>(transform->width * transform->scale);
+            collider.h = static_cast<int>(transform->height * transform->scale);
+
+            //hardcoding here
+            if(!entity->hasComponent<TileComponent>())
+            {
+                collider.y = collider.y + 10;
+                collider.h = collider.h - 10;
+                collider.x = collider.x + 8;
+                collider.w = collider.w - 16;
+            }
+            //collider.w = static_cast<int>(transform->dstWidth);
+            //collider.h = static_cast<int>(transform->dstHeight);
         }
 };
 

@@ -29,6 +29,7 @@ class KeyboardController : public Component
                 {
                     case SDLK_w:
                     case SDLK_UP:
+                        transform->velocity.x = 0;
                         transform->velocity.y = (-1)*PLAYER_VELOCITY;
                         sprite->Play("Idle_U");
                         //sprite->RotateDegrees = 0;
@@ -37,6 +38,7 @@ class KeyboardController : public Component
 
                     case SDLK_a:
                     case SDLK_LEFT:
+                        transform->velocity.y = 0;
                         transform->velocity.x = (-1)*PLAYER_VELOCITY;
                         sprite->Play("Idle_L");
                         //sprite->RotateDegrees = 270;
@@ -45,6 +47,7 @@ class KeyboardController : public Component
 
                     case SDLK_d:
                     case SDLK_RIGHT:
+                        transform->velocity.y = 0;
                         transform->velocity.x = PLAYER_VELOCITY;
                         sprite->Play("Idle_R");
                         //sprite->RotateDegrees = 90;
@@ -52,6 +55,7 @@ class KeyboardController : public Component
 
                     case SDLK_s:
                     case SDLK_DOWN:
+                        transform->velocity.x = 0;
                         transform->velocity.y = PLAYER_VELOCITY;
                         sprite->Play("Idle_D");
                         //sprite->RotateDegrees = 180;

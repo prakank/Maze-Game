@@ -28,14 +28,13 @@ SDL_Rect Game::camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 bool Game::isRunning = false;
 int Game::RowsToSkip = ROWS_TO_SKIP;
 string Game::Color = BACKGROUND_COLOR;
-int mapScale    = OVERALL_SCALE;
-int windowScale = WINDOW_SCALE;
+float mapScale    = OVERALL_SCALE;
+float windowScale = WINDOW_SCALE;
 
 std::vector<ColliderComponent*> Game::colliders;
 
 Manager manager;
 auto& player(manager.addEntity());
-auto& wall(manager.addEntity());
 
 
 
@@ -89,7 +88,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         //if(player.manager == manager)cout<<"player has component\n";
 
         player.addComponent<TransformComponent>(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, DEFAULT_IMAGE_SIZE*2,
-                                                 DEFAULT_IMAGE_SIZE*2, mapScale);
+                                                 DEFAULT_IMAGE_SIZE*2, mapScale/2);
 
         map<string, Animation*> map1;
         map1.insert(pair<string, Animation*>("Idle_U", new Animation(0, 1, 100, 0, 0)));
@@ -99,6 +98,14 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         player.addComponent<SpriteComponent>("assets/spritesheets/character1_all.png", true, map1, "Idle_D");
         player.addComponent<KeyboardController>();
         player.addComponent<ColliderComponent>("Player");
+        auto cp = player.getComponent<ColliderComponent>().collider;
+        cp.y = cp.y + 5;
+        cp.h = cp.y - 5;
+        cp.x = cp.x + 2;
+        cp.w = cp.w - 4; 
+        
+
+        
         player.addGroup(groupPlayers);
         
     }
@@ -125,15 +132,6 @@ void Game::update(){
     manager.refresh();
     manager.update();
 
-    camera.x = player.getComponent<TransformComponent>().position.x - SCREEN_WIDTH/2;
-    camera.y = player.getComponent<TransformComponent>().position.y - SCREEN_HEIGHT/2;
-    //cout<<"Player X: "<<player.getComponent<TransformComponent>().position.x<<"Player Y: "<<player.getComponent<TransformComponent>().position.y<<"\n";
-
-    camera.x = max(camera.x,0);
-    camera.y = max(camera.y,0);
-    camera.x = min(camera.x, camera.w * ( mapScale / windowScale - 1 ) );
-    camera.y = min(camera.y, camera.h * ( mapScale / windowScale - 1 ) );
-
     // Vector2D pVel = player.getComponent<TransformComponent>().velocity;
     // int pSpeed    = player.getComponent<TransformComponent>().speed;  
 
@@ -145,12 +143,58 @@ void Game::update(){
 
     for(auto cc: colliders)
     {
+        
         // if(*cc == player.getComponent<ColliderComponent>())continue;
         if(!Collision::EqualColliderComponent(player.getComponent<ColliderComponent>(), *cc))
         {
             if(Collision::AABB(player.getComponent<ColliderComponent>(), *cc))
             {
-                player.getComponent<TransformComponent>().velocity * -1;
+                auto& rect = cc->entity->getComponent<ColliderComponent>().collider;
+                auto& rect_p = player.getComponent<ColliderComponent>().collider;
+                auto& pos_p = player.getComponent<TransformComponent>().position;
+                auto& vel = player.getComponent<TransformComponent>().velocity;
+                /*if(vel.x>0){
+                    //vel.x = 0;
+                    pos_p.x = rect.x - rect_p.w - 2 - 8;
+                }
+
+                else if(vel.x<0){
+                    //vel.x = 0;
+                    pos_p.x = rect.x + rect.w + 2 - 8;
+                }
+
+                if(vel.y>0){
+                    //vel.y = 0;
+                    pos_p.y = rect.y - rect_p.h - 2 - 10;
+                }
+
+                else if(vel.y < 0){
+                    //vel.y = 0;
+                    pos_p.y = rect.y + rect.h + 2 - 10;
+                }*/
+
+                if(true){
+                    if(rect.w<rect.h){
+                        if(rect_p.x + rect_p.w/2 < rect.x){
+                            pos_p.x = rect.x - rect_p.w - 2 - 8;
+                        }
+
+                        else if(rect_p.x + rect_p.w/2 >= rect.x){
+                            pos_p.x = rect.x + rect.w + 2 - 8;
+                        }
+                    }
+                    else{
+                        if(rect_p.y + rect_p.h/2 < rect.y){
+                            pos_p.y = rect.y - rect_p.h - 2 - 10;
+                        }
+                        else if(rect_p.y + rect_p.h/2 >= rect.y){
+                            pos_p.y = rect.y + rect.h + 2 - 10;
+                        }
+                    }
+                }
+                
+                
+
                 // player.getComponent<TransformComponent>().scale = 1;
                 //cout << "COLLISION " <<  collision_count++ << "\n\n"; //HERE
             }
@@ -182,7 +226,8 @@ void Game::update(){
 
 
 void Game::render(){
-    SDL_RenderClear(renderer);    
+
+    SDL_RenderClear(renderer);
     // backgroundMap->DrawMap();
     //manager.draw();
     for(auto& t : tiles)
@@ -197,9 +242,28 @@ void Game::render(){
     {
         e->draw();
     }
+
+//////////////////////
+//////////////////////
+//////////////////////
+//////////////////////
+// uncomment below to view collider boxes
+//
+/*    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 120);
+    for(auto cc:colliders){
+        SDL_RenderDrawRect(renderer, &cc->collider);
+    }
+*/
     
+    
+
+//////////////////////
+//////////////////////
+//////////////////////
+
     SDL_RenderPresent(renderer);
 }
+
 
 void Game::clean(){
     SDL_DestroyWindow(window);
@@ -224,6 +288,7 @@ void Game::AddTile(int id, int row, int col)
         
         if(id%2 == 1)
         {
+            
             auto& tile1(manager.addEntity());
             tile1.addComponent<TileComponent>(row, col + DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE, 0, DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, id, mapScale); //    |
             tile1.addComponent<ColliderComponent>("Tiles1");

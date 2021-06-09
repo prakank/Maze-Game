@@ -5,6 +5,7 @@
 #include "../Vector2D.hpp"
 #include "../game.hpp"
 #include "../Constants.hpp"
+#include <cmath>
 // #include "SpriteComponent.hpp"
 
 class TransformComponent : public Component{
@@ -61,13 +62,13 @@ class TransformComponent : public Component{
             position.x += velocity.x * speed;
             position.y += velocity.y * speed;
 
-            position.x = max(position.x,(ROWS_TO_SKIP/2) * scale);
-            position.y = max(position.y,(ROWS_TO_SKIP/2) * scale);
+            position.x = max(1.0*position.x, -2.0);
+            position.y = max(1.0*position.y, -5.0);
 
             // player_dstRect = entity->getComponent<SpriteComponent>().dstRect;
 
-            position.x = min(position.x, static_cast<float>(Game::camera.x + Game::camera.w - dstWidth  - (ROWS_TO_SKIP/2) * scale ) );
-            position.y = min(position.y, static_cast<float>(Game::camera.y + Game::camera.h - dstHeight - (ROWS_TO_SKIP/2) * scale ) );
+            position.x = min(1.0*position.x, 1.0*MAZE_COLUMNS*DEFAULT_IMAGE_SIZE);
+            position.y = min(1.0*position.y, 1.0*MAZE_ROWS * DEFAULT_IMAGE_SIZE );
         }
 
 };
