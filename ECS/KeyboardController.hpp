@@ -31,7 +31,7 @@ class KeyboardController : public Component
                     case SDLK_UP:
                         transform->velocity.x = 0;
                         transform->velocity.y = (-1)*PLAYER_VELOCITY;
-                        sprite->Play("Idle_U");
+                        sprite->Play("Walk_U");
                         //sprite->RotateDegrees = 0;
                         // sprite->spriteFlip = SDL_FLIP_VERTICAL;
                         break;
@@ -40,7 +40,7 @@ class KeyboardController : public Component
                     case SDLK_LEFT:
                         transform->velocity.y = 0;
                         transform->velocity.x = (-1)*PLAYER_VELOCITY;
-                        sprite->Play("Idle_L");
+                        sprite->Play("Walk_L");
                         //sprite->RotateDegrees = 270;
                         // sprite->spriteFlip = SDL_FLIP_HORIZONTAL;                        
                         break;
@@ -49,7 +49,7 @@ class KeyboardController : public Component
                     case SDLK_RIGHT:
                         transform->velocity.y = 0;
                         transform->velocity.x = PLAYER_VELOCITY;
-                        sprite->Play("Idle_R");
+                        sprite->Play("Walk_R");
                         //sprite->RotateDegrees = 90;
                         break;
 
@@ -57,7 +57,7 @@ class KeyboardController : public Component
                     case SDLK_DOWN:
                         transform->velocity.x = 0;
                         transform->velocity.y = PLAYER_VELOCITY;
-                        sprite->Play("Idle_D");
+                        sprite->Play("Walk_D");
                         //sprite->RotateDegrees = 180;
                         break;
                     case SDLK_ESCAPE:

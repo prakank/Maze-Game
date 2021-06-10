@@ -94,7 +94,11 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         map1.insert(pair<string, Animation*>("Idle_U", new Animation(0, 1, 100, 0, 0)));
         map1.insert(pair<string, Animation*>("Idle_L", new Animation(1, 1, 100, 0, 1)));
         map1.insert(pair<string, Animation*>("Idle_D", new Animation(2, 1, 100, 0, 2)));
-        map1.insert(pair<string, Animation*>("Idle_R", new Animation(2, 1, 100, 0, 3)));
+        map1.insert(pair<string, Animation*>("Idle_R", new Animation(3, 1, 100, 0, 3)));
+        map1.insert(pair<string, Animation*>("Walk_U", new Animation(4, 9, 100, 15, 0)));
+        map1.insert(pair<string, Animation*>("Walk_L", new Animation(5, 9, 100, 15, 1)));
+        map1.insert(pair<string, Animation*>("Walk_D", new Animation(6, 9, 100, 15, 2)));
+        map1.insert(pair<string, Animation*>("Walk_R", new Animation(7, 9, 100, 15, 3)));
         player.addComponent<SpriteComponent>("assets/spritesheets/character1_all.png", true, map1, "Idle_D");
         player.addComponent<KeyboardController>();
         player.addComponent<ColliderComponent>("Player");

@@ -1,0 +1,10 @@
+To implement:
+animation
+add monster entities
+add health
+add objects
+change tilesprites
+(possibly change maze layout)
+add UI(start menu) etc.
+add tons of logic and entities
+Sockets implementation
