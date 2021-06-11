@@ -1,3 +1,4 @@
+#pragma once
 #include "EntityComponentSystem.hpp"
 
 void Entity::addGroup(Group mGroup)

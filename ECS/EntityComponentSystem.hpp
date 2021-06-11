@@ -93,7 +93,7 @@ class Entity
         // Constructor
         Entity(Manager& mManager) : manager(mManager) {}
 
-        void init(){}
+        virtual void init(){}
 
         void update()
         {
@@ -213,6 +213,13 @@ class Manager
         Entity& addEntity()
         {
             Entity* e = new Entity(*this);
+            unique_ptr<Entity> uPtr{ e };
+            entities.emplace_back(std::move(uPtr));
+            return *e;
+        }
+
+        template<typename T> Entity& addEntity(){
+            Entity* e = new T(*this);
             unique_ptr<Entity> uPtr{ e };
             entities.emplace_back(std::move(uPtr));
             return *e;
