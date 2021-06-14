@@ -22,6 +22,8 @@ public:
     int row;
     int col;
     bool neighbours[4] = {false, false, false, false}; //{U, L, D, R}
+    bool isWall = false;
+    bool isMazeEdge = false;
     int id;
     Node(int r, int c){
         row = r;
@@ -30,7 +32,8 @@ public:
     }
 
     int getTileId(){
-        return 8*(!neighbours[0]) + 4*(!neighbours[1]) + 2*(!neighbours[2]) + (!neighbours[3]);
+
+        return 32*isMazeEdge + 16*isWall + 8*(!neighbours[0]) + 4*(!neighbours[1]) + 2*(!neighbours[2]) + (!neighbours[3]);
     }
 
     static void join(Node* a, Node* b){
@@ -249,6 +252,7 @@ class MazeGenerator{
 
 public:
     int random_seed;
+    vector<vector<Node*>> nodes;
     MazeGenerator(int seed){
         random_seed = seed;
 
@@ -264,6 +268,20 @@ public:
         vector<vector<Node*>> nodeList = graph->nodes;
 
         MazeGenerator::remove_deadEnds(nodeList);
+        nodes = nodeList;
+        vector<vector<Node*>> ext = MazeGenerator::extendMaze(nodeList);
+
+        std::string filename2 = "Kruskal_extended.txt";
+        std::ofstream output2(filename2);
+        for(int i = 0;i<ext.size();i++){
+            for(int j = 0;j<ext[0].size();j++){
+                output2<< ext[i][j]->getTileId();
+                if(j == ext[0].size() - 1) output2<<"\n";
+                else output2<<",";
+            }
+        }
+
+        output2.close();
 
 
 
@@ -321,6 +339,72 @@ public:
                 }
             }
         }
+    }
+
+    static vector<vector<Node*>> extendMaze(vector<vector<Node*>> nodes){
+        vector<vector<Node*>> ext;
+        for(int i = 0;i<2*MAZE_ROWS+1;i++)
+        {
+            vector<Node*> temp(2*MAZE_COLUMNS+1, nullptr);
+            ext.pb(temp);
+        }
+
+        for(int i = 0;i<2*MAZE_ROWS+1;i++){
+            ext[i][0] = new Node(i, 0);
+            ext[i][0]->isWall = true;
+        }
+
+        for(int j = 1;j<2*MAZE_COLUMNS+1;j++){
+            ext[0][j] = new Node(0, j);
+            ext[0][j]->isWall = true;
+        }
+        for(int i = 0;i<MAZE_ROWS;i++){
+            for (int j=0;j<MAZE_COLUMNS;j++){
+                    ext[2*i+1][2*j+1] = new Node(2*i+1, 2*j+1);
+                    ext[2*i+1][2*j+2] = new Node(2*i+1, 2*j+2);
+                    ext[2*i + 2][2*j + 2] = new Node(2*i + 2, 2*j + 2); ext[2*i + 2][2*j + 2]->isWall = true;
+                    ext[2*i+2][2*j+1] = new Node(2*i + 2, 2*j+1);
+
+                    if(nodes[i][j]->getTileId()%2 == 1){
+                        ext[2*i+1][2*j+2]->isWall = true;
+                    }
+
+                    if(nodes[i][j]->getTileId()%4 >= 2){
+                        ext[2*i+2][2*j+1]->isWall = true;
+                    }
+            }
+        }
+
+        for(int i = 0;i<2*MAZE_ROWS+1;i++){
+            for(int j = 0;j < 2*MAZE_COLUMNS+1;j++){
+                if(ext[i][j]->isWall){
+                    if(i>0) ext[i][j]->neighbours[0] = ext[i-1][j]->isWall;
+
+                    if(i<2*MAZE_ROWS) ext[i][j]->neighbours[2] = ext[i+1][j]->isWall;
+
+                    if(j>0) ext[i][j]->neighbours[1] = ext[i][j-1]->isWall;
+
+                    if(j<2*MAZE_COLUMNS) ext[i][j]->neighbours[3] = ext[i][j+1]->isWall;
+                }
+                else{
+                    if(i>0) ext[i][j]->neighbours[0] = !ext[i-1][j]->isWall;
+
+                    if(i<2*MAZE_ROWS) ext[i][j]->neighbours[2] = !ext[i+1][j]->isWall;
+
+                    if(j>0) ext[i][j]->neighbours[1] = !ext[i][j-1]->isWall;
+
+                    if(j<2*MAZE_COLUMNS) ext[i][j]->neighbours[3] = !ext[i][j+1]->isWall;
+                }
+
+                if(i==0||i==2*MAZE_ROWS||j==0||j==2*MAZE_COLUMNS) ext[i][j]->isMazeEdge = true;
+            }
+        }
+
+
+        return ext;
+
+        
+        
     }
 
     static int get_random_modulo(int m){

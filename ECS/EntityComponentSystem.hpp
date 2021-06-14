@@ -87,6 +87,8 @@ class Entity
         ComponentArray  componentArray ; 
         ComponentBitset componentBitset;
         GroupBitset     groupBitset;
+
+
     
     public:
         
@@ -158,7 +160,16 @@ class Entity
             return *static_cast<T*>(ptr);
         }
         
-        // Returns the component and not a pointer to the componenet.
+        
+
+        // Returns the component and not a pointer to the component.
+
+        /*custom functions added here*/
+        /*enemy functions*/
+
+        int EnemyMovementDirection;
+        
+        
 };
 
 class Manager

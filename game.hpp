@@ -8,6 +8,9 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <random>
+#include "MazeGeneration_DFS/Kruskal_Maze.cpp"
+#include "ECS/EntityComponentSystem.hpp"
 
 class ColliderComponent;
 
@@ -34,6 +37,10 @@ class Game{
         static bool isRunning;
         static int RowsToSkip;
         static string Color;
+        static MazeGenerator* Maze;
+        static vector<int> checkTile(Entity& e);
+        static void enemyChangeDirection(Entity& enemy);
+
 
     private:
         

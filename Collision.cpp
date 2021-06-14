@@ -13,11 +13,6 @@ bool Collision::AABB(const ColliderComponent& a, const ColliderComponent& b)
 {
     if( AABB(a.collider, b.collider ) )
     {
-        cout << a.tag << " hit: " << b.tag << endl;
-        // cout << "X: " << a.collider.x << ", " << b.collider.x << endl;
-        // cout << "Y: " << a.collider.y << ", " << b.collider.y << endl;
-        // cout << "Width: " << a.collider.w << ", " << b.collider.w << endl;
-        // cout << "Height: " << a.collider.h << ", " << b.collider.h << endl << endl;
         return true;
     }
     return false;

@@ -1,5 +1,6 @@
 # pragma once
 #include "Player.hpp"
+#include "Enemy.hpp"
 #include "MazeGeneration_DFS/Kruskal_Maze.cpp"
 #include "game.hpp"
 #include "TextureManager.hpp"
@@ -18,10 +19,11 @@
 // Map* backgroundMap = NULL;   
 
 
-MazeGenerator* Maze;
+
 
 SDL_Renderer* Game::renderer = NULL;
 SDL_Event Game::event;
+MazeGenerator* Game::Maze;
 
 SDL_Rect Game::camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -35,6 +37,7 @@ std::vector<ColliderComponent*> Game::colliders;
 
 Manager manager;
 auto& player(manager.addEntity<Player>());
+auto& enemy(manager.addEntity<Enemy>());
 
 
 
@@ -81,13 +84,16 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         }
         // backgroundMap = new Map();
-        Maze = new MazeGenerator(54);
+        Game::Maze = new MazeGenerator(54);
 
         Map::LoadMap("Kruskal.txt", MAZE_ROWS, MAZE_COLUMNS);
 
         //if(player.manager == manager)cout<<"player has component\n";
         player.init();
         player.addGroup(groupPlayers);
+
+        enemy.init();
+        enemy.addGroup(groupEnemies);
 
         
         
@@ -126,35 +132,14 @@ void Game::update(){
 
     for(auto cc: colliders)
     {
-        
-        // if(*cc == player.getComponent<ColliderComponent>())continue;
         if(!Collision::EqualColliderComponent(player.getComponent<ColliderComponent>(), *cc))
         {
-            if(Collision::AABB(player.getComponent<ColliderComponent>(), *cc))
+            if(Collision::AABB(player.getComponent<ColliderComponent>(), *cc) && cc->entity->hasComponent<TileComponent>())
             {
                 auto& rect = cc->entity->getComponent<ColliderComponent>().collider;
                 auto& rect_p = player.getComponent<ColliderComponent>().collider;
                 auto& pos_p = player.getComponent<TransformComponent>().position;
                 auto& vel = player.getComponent<TransformComponent>().velocity;
-                /*if(vel.x>0){
-                    //vel.x = 0;
-                    pos_p.x = rect.x - rect_p.w - 2 - 8;
-                }
-
-                else if(vel.x<0){
-                    //vel.x = 0;
-                    pos_p.x = rect.x + rect.w + 2 - 8;
-                }
-
-                if(vel.y>0){
-                    //vel.y = 0;
-                    pos_p.y = rect.y - rect_p.h - 2 - 10;
-                }
-
-                else if(vel.y < 0){
-                    //vel.y = 0;
-                    pos_p.y = rect.y + rect.h + 2 - 10;
-                }*/
 
                 if(true){
                     if(rect.w<rect.h){
@@ -177,31 +162,46 @@ void Game::update(){
                 }
                 
                 
+            }
+        }
 
-                // player.getComponent<TransformComponent>().scale = 1;
-                //cout << "COLLISION " <<  collision_count++ << "\n\n"; //HERE
+        if(!Collision::EqualColliderComponent(enemy.getComponent<ColliderComponent>(), *cc))
+        {
+            if(Collision::AABB(enemy.getComponent<ColliderComponent>(), *cc) && cc->entity->hasComponent<TileComponent>())
+            {
+                auto& rect = cc->entity->getComponent<ColliderComponent>().collider;
+                auto& rect_p = enemy.getComponent<ColliderComponent>().collider;
+                auto& pos_p =enemy.getComponent<TransformComponent>().position;
+                auto& vel = enemy.getComponent<TransformComponent>().velocity;
+
+                if(true){
+                    if(rect.w<rect.h){
+                        if(rect_p.x + rect_p.w/2 < rect.x){
+                            pos_p.x = rect.x - rect_p.w - 2 - 8;
+                        }
+
+                        else if(rect_p.x + rect_p.w/2 >= rect.x){
+                            pos_p.x = rect.x + rect.w + 2 - 8;
+                        }
+                    }
+                    else{
+                        if(rect_p.y + rect_p.h/2 < rect.y){
+                            pos_p.y = rect.y - rect_p.h - 2 - 10;
+                        }
+                        else if(rect_p.y + rect_p.h/2 >= rect.y){
+                            pos_p.y = rect.y + rect.h + 2 - 10;
+                        }
+                    }
+                }
+
+                Game::enemyChangeDirection(enemy);
+                
+                
             }
         }
     }
 
-    // if( Collision::AABB(player.getComponent<ColliderComponent>().collider, 
-    //                     wall.getComponent<ColliderComponent>().collider ) )
-    // {
-    //     player.getComponent<TransformComponent>().velocity * -1;
-    //     // player.getComponent<TransformComponent>().scale = player.getComponent<TransformComponent>().scale/2;
-    //     player.getComponent<TransformComponent>().scale = 1;
-    //     cout << "COLLISION " <<  collision_count++ << "\n";
-    // }
 
-    // player.getComponent<TransformComponent>().position.Add(Vector2D(2,0));
-    
-    // if(player.getComponent<TransformComponent>().position.x > 100){
-    //     player.getComponent<SpriteComponent>().setTex("assets/enemy.png");
-    // }
-    
-    // if(player.getComponent<TransformComponent>().position.x > 200){
-    //     player.getComponent<SpriteComponent>().setTex("assets/player.png");
-    // }
 
 }
 
@@ -232,11 +232,11 @@ void Game::render(){
 //////////////////////
 // uncomment below to view collider boxes
 //
-/*    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 120);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 120);
     for(auto cc:colliders){
         SDL_RenderDrawRect(renderer, &cc->collider);
     }
-*/
+
     
     
 
@@ -254,6 +254,8 @@ void Game::clean(){
     SDL_Quit();
     cout << "Game Ended\n";
 }
+
+//other functions
 
 
 void Game::AddTile(int id, int row, int col)
@@ -304,3 +306,52 @@ void Game::AddTile(int id, int row, int col)
     }
     
 }
+
+vector<int> Game::checkTile(Entity& e){
+    auto collider = e.getComponent<ColliderComponent>().collider;
+    int x = collider.x + collider.w/2;
+    int y = collider.y + collider.h/2;
+    vector<int> v;
+    v.pb(y/TILE_SIZE);
+    v.pb(x/TILE_SIZE);
+    return v;
+}
+
+/*static void Game::enemyAI(Entity& player, Entity& enemy){
+    vector<int> tile_p = checkTile(player);
+    vector<int> tile_en = checkTile(enemy);
+
+
+}*/
+
+void Game::enemyChangeDirection(Entity& enemy){
+
+    //used rectangle collider_transform diff
+    vector<int> tile = Game::checkTile(enemy);
+    auto& pos = enemy.getComponent<TransformComponent>().position;
+    auto& ai = enemy.getComponent<AIController>();
+    vector<int> dir;
+    for(int i = 0;i<4;i++)
+    {
+        if(Game::Maze->nodes[tile[0]][tile[1]]->neighbours[i]) dir.pb(i);
+    }
+
+    cout<<"Info:\n tile: ("<<tile[0]<<", "<<tile[1]<<")\ndir: "<<"\n";
+    cout<<"dirs: \n";
+    for(int i = 0;i < dir.size();i++){
+       cout<<dir[i]<<"\n";
+    }
+    cout<<"player: X = "<<pos.x<<", Y = "<<pos.y<<"\n";
+
+    srand(time(0));
+    int seed = rand();
+    int fin_dir = dir[(seed % dir.size() + dir.size()) % dir.size()];
+    ai.MovementDirection = fin_dir;
+
+}
+
+/*bool Game::checkEnemyBoundingBox(Entity& enemy){
+
+}*/
+
+

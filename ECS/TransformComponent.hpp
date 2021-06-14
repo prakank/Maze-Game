@@ -62,8 +62,8 @@ class TransformComponent : public Component{
             position.x += velocity.x * speed;
             position.y += velocity.y * speed;
 
-            position.x = max(1.0*position.x, -2.0);
-            position.y = max(1.0*position.y, -5.0);
+            position.x = max(1.0*position.x, -9.0);
+            position.y = max(1.0*position.y, -11.0);
 
             // player_dstRect = entity->getComponent<SpriteComponent>().dstRect;
 

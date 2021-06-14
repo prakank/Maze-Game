@@ -25,9 +25,10 @@ enum groupLabels : size_t
 
 #define ROWS_TO_SKIP_PYTHON  2
 
-#define MAZE_ROWS            20     //must be atleast 3
-#define MAZE_COLUMNS         25   //must be atleast 3
+#define MAZE_ROWS            10     //must be atleast 3
+#define MAZE_COLUMNS         12  //must be atleast 3
 #define DEFAULT_IMAGE_SIZE  32      /* CHANGE ONLY IF TILE SIZE AND IMAGE SIZE IS NOT 32 */
+#define TILE_SIZE 32
 #define BACKGROUND_COLOR    "Black" // Supported Colors -> "White" and "Black"
 #define ANIMATION           false
 #define OVERALL_SCALE       MAP_SCALE * WINDOW_SCALE
@@ -67,7 +68,7 @@ enum groupLabels : size_t
 // =================================================================================
         // --------------- TransformComponent.hpp ---------------
 
-#define PLAYER_SPEED    3
+#define PLAYER_SPEED    1
 #define SCREEN_WIDTH  MAZE_COLUMNS * DEFAULT_IMAGE_SIZE * WINDOW_SCALE
 #define SCREEN_HEIGHT MAZE_ROWS * DEFAULT_IMAGE_SIZE    * WINDOW_SCALE
 // #define SCREEN_WIDTH WINDOW_WIDTH
