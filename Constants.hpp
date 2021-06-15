@@ -14,8 +14,9 @@
 enum groupLabels : size_t
 {
     groupMap,
-    groupPlayers,
+    groupCollectibles,
     groupEnemies,
+    groupPlayers,
     groupColliders
 };
 

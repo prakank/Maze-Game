@@ -79,10 +79,10 @@ class SpriteComponent : public Component
         {   
             if(animate)
             {
-                srcRect.x = srcRect.w*animX + srcRect.w * static_cast<int>( (SDL_GetTicks() / speed) % frames );
+                srcRect.x = animX + srcRect.w * static_cast<int>( (SDL_GetTicks() / speed) % frames );
             }
 
-            srcRect.y = animY * srcRect.h;
+            srcRect.y = animY;
 
             dstRect.x = static_cast<int>(transform->position.x) - Game::camera.x;
             dstRect.y = static_cast<int>(transform->position.y) - Game::camera.y;

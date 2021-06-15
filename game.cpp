@@ -12,6 +12,7 @@
 #include "MazeGeneration_DFS/MazeGeneration.cpp"
 #include "ECS/EntityComponentSystem.cpp"
 #include "Constants.hpp"
+#include "ECS/Animation.hpp"
 
 // GameObject* player = NULL;
 // GameObject* enemy = NULL;
@@ -36,12 +37,10 @@ float windowScale = WINDOW_SCALE;
 std::vector<ColliderComponent*> Game::colliders;
 
 Manager manager;
-auto& player(manager.addEntity<Player>());
-auto& enemy(manager.addEntity<Enemy>());
 
 
 
-
+auto& collectibles(manager.getGroup(groupCollectibles));
 auto& tiles(manager.getGroup(groupMap));
 auto& players(manager.getGroup(groupPlayers));
 auto& enemies(manager.getGroup(groupEnemies));
@@ -89,11 +88,13 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         Map::LoadMap("Kruskal.txt", MAZE_ROWS, MAZE_COLUMNS);
 
         //if(player.manager == manager)cout<<"player has component\n";
+        auto& player(manager.addEntity<Player>());
         player.init();
-        player.addGroup(groupPlayers);
 
+        auto& enemy(manager.addEntity<Enemy>());
         enemy.init();
-        enemy.addGroup(groupEnemies);
+
+        Game::addDragonBall(5, 2, 3);
 
         
         
@@ -132,72 +133,91 @@ void Game::update(){
 
     for(auto cc: colliders)
     {
-        if(!Collision::EqualColliderComponent(player.getComponent<ColliderComponent>(), *cc))
-        {
-            if(Collision::AABB(player.getComponent<ColliderComponent>(), *cc) && cc->entity->hasComponent<TileComponent>())
+        for(auto& player:players){  
+        
+            if(!Collision::EqualColliderComponent(player->getComponent<ColliderComponent>(), *cc))
             {
-                auto& rect = cc->entity->getComponent<ColliderComponent>().collider;
-                auto& rect_p = player.getComponent<ColliderComponent>().collider;
-                auto& pos_p = player.getComponent<TransformComponent>().position;
-                auto& vel = player.getComponent<TransformComponent>().velocity;
+                if(Collision::AABB(player->getComponent<ColliderComponent>(), *cc))
+                {
+                    //cout<<"yes\n";
+                    if(cc->tag == "Tiles")
+                    {
+                        auto& rect = cc->entity->getComponent<ColliderComponent>().collider;
+                        auto& rect_p = player->getComponent<ColliderComponent>().collider;
+                        auto& pos_p = player->getComponent<TransformComponent>().position;
+                        auto& vel = player->getComponent<TransformComponent>().velocity;
 
-                if(true){
-                    if(rect.w<rect.h){
-                        if(rect_p.x + rect_p.w/2 < rect.x){
-                            pos_p.x = rect.x - rect_p.w - 2 - 8;
-                        }
+                        if(true){
+                            if(rect.w<rect.h){
+                                if(rect_p.x + rect_p.w/2 < rect.x){
+                                    pos_p.x = rect.x - rect_p.w - 2 - 8;
+                                }
 
-                        else if(rect_p.x + rect_p.w/2 >= rect.x){
-                            pos_p.x = rect.x + rect.w + 2 - 8;
+                                else if(rect_p.x + rect_p.w/2 >= rect.x){
+                                    pos_p.x = rect.x + rect.w + 2 - 8;
+                                }
+                            }
+                            else{
+                                if(rect_p.y + rect_p.h/2 < rect.y){
+                                    pos_p.y = rect.y - rect_p.h - 2 - 10;
+                                }
+                                else if(rect_p.y + rect_p.h/2 >= rect.y){
+                                    pos_p.y = rect.y + rect.h + 2 - 10;
+                                }
+                            }
                         }
                     }
-                    else{
-                        if(rect_p.y + rect_p.h/2 < rect.y){
-                            pos_p.y = rect.y - rect_p.h - 2 - 10;
-                        }
-                        else if(rect_p.y + rect_p.h/2 >= rect.y){
-                            pos_p.y = rect.y + rect.h + 2 - 10;
-                        }
+
+                    else if(cc->tag == "DragonBall"){
+                        true;
                     }
+                    
+                    
                 }
-                
-                
+
+
             }
         }
 
-        if(!Collision::EqualColliderComponent(enemy.getComponent<ColliderComponent>(), *cc))
-        {
-            if(Collision::AABB(enemy.getComponent<ColliderComponent>(), *cc) && cc->entity->hasComponent<TileComponent>())
+        for(auto& enemy:enemies){
+            if(!Collision::EqualColliderComponent(enemy->getComponent<ColliderComponent>(), *cc))
             {
-                auto& rect = cc->entity->getComponent<ColliderComponent>().collider;
-                auto& rect_p = enemy.getComponent<ColliderComponent>().collider;
-                auto& pos_p =enemy.getComponent<TransformComponent>().position;
-                auto& vel = enemy.getComponent<TransformComponent>().velocity;
+                if(Collision::AABB(enemy->getComponent<ColliderComponent>(), *cc))
+                {
 
-                if(true){
-                    if(rect.w<rect.h){
-                        if(rect_p.x + rect_p.w/2 < rect.x){
-                            pos_p.x = rect.x - rect_p.w - 2 - 8;
-                        }
+                    if(cc->tag == "Tiles")
+                    {
+                        auto& rect = cc->entity->getComponent<ColliderComponent>().collider;
+                        auto& rect_p = enemy->getComponent<ColliderComponent>().collider;
+                        auto& pos_p =enemy->getComponent<TransformComponent>().position;
+                        auto& vel = enemy->getComponent<TransformComponent>().velocity;
 
-                        else if(rect_p.x + rect_p.w/2 >= rect.x){
-                            pos_p.x = rect.x + rect.w + 2 - 8;
+                        if(true){
+                            if(rect.w<rect.h){
+                                if(rect_p.x + rect_p.w/2 < rect.x){
+                                    pos_p.x = rect.x - rect_p.w - 2 - 8;
+                                }
+
+                                else if(rect_p.x + rect_p.w/2 >= rect.x){
+                                    pos_p.x = rect.x + rect.w + 2 - 8;
+                                }
+                            }
+                            else{
+                                if(rect_p.y + rect_p.h/2 < rect.y){
+                                    pos_p.y = rect.y - rect_p.h - 2 - 10;
+                                }
+                                else if(rect_p.y + rect_p.h/2 >= rect.y){
+                                    pos_p.y = rect.y + rect.h + 2 - 10;
+                                }
+                            }
                         }
                     }
-                    else{
-                        if(rect_p.y + rect_p.h/2 < rect.y){
-                            pos_p.y = rect.y - rect_p.h - 2 - 10;
-                        }
-                        else if(rect_p.y + rect_p.h/2 >= rect.y){
-                            pos_p.y = rect.y + rect.h + 2 - 10;
-                        }
-                    }
+                    Game::enemyChangeDirection(enemy);
+                    
+                    
                 }
-
-                Game::enemyChangeDirection(enemy);
-                
-                
             }
+
         }
     }
 
@@ -217,13 +237,16 @@ void Game::render(){
     {
         t->draw();
     }
-    for(auto& p : players)
-    {
-        p->draw();
+    for(auto& c: collectibles){
+        c->draw();
     }
     for(auto& e : enemies)
     {
         e->draw();
+    }
+    for(auto& p : players)
+    {
+        p->draw();
     }
 
 //////////////////////
@@ -232,10 +255,10 @@ void Game::render(){
 //////////////////////
 // uncomment below to view collider boxes
 //
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 120);
+    /*SDL_SetRenderDrawColor(renderer, 255, 0, 0, 120);
     for(auto cc:colliders){
         SDL_RenderDrawRect(renderer, &cc->collider);
-    }
+    }*/
 
     
     
@@ -276,7 +299,7 @@ void Game::AddTile(int id, int row, int col)
             
             auto& tile1(manager.addEntity());
             tile1.addComponent<TileComponent>(row, col + DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE, 0, DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, id, mapScale); //    |
-            tile1.addComponent<ColliderComponent>("Tiles1");
+            tile1.addComponent<ColliderComponent>("Tiles");
             tile1.addGroup(groupMap);
         }
 
@@ -284,7 +307,7 @@ void Game::AddTile(int id, int row, int col)
         {
             auto& tile2(manager.addEntity());
             tile2.addComponent<TileComponent>(row + DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, col, DEFAULT_IMAGE_SIZE, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE - ROWS_TO_SKIP_PYTHON, 0, id, mapScale);//    __
-            tile2.addComponent<ColliderComponent>("Tiles2");
+            tile2.addComponent<ColliderComponent>("Tiles");
             tile2.addGroup(groupMap);
         }
 
@@ -292,7 +315,7 @@ void Game::AddTile(int id, int row, int col)
         {
             auto& tile3(manager.addEntity());
             tile3.addComponent<TileComponent>(row, col, DEFAULT_IMAGE_SIZE, ROWS_TO_SKIP_PYTHON, 0, 0, id, mapScale); // |
-            tile3.addComponent<ColliderComponent>("Tiles3");
+            tile3.addComponent<ColliderComponent>("Tiles");
             tile3.addGroup(groupMap);
         }
 
@@ -300,15 +323,15 @@ void Game::AddTile(int id, int row, int col)
         {
             auto& tile4(manager.addEntity());                                                              // __
             tile4.addComponent<TileComponent>(row, col, ROWS_TO_SKIP_PYTHON, DEFAULT_IMAGE_SIZE, 0, 0, id, mapScale);// 
-            tile4.addComponent<ColliderComponent>("Tiles4");
+            tile4.addComponent<ColliderComponent>("Tiles");
             tile4.addGroup(groupMap);
         }
     }
     
 }
 
-vector<int> Game::checkTile(Entity& e){
-    auto collider = e.getComponent<ColliderComponent>().collider;
+vector<int> Game::checkTile(Entity* e){
+    auto collider = e->getComponent<ColliderComponent>().collider;
     int x = collider.x + collider.w/2;
     int y = collider.y + collider.h/2;
     vector<int> v;
@@ -324,12 +347,12 @@ vector<int> Game::checkTile(Entity& e){
 
 }*/
 
-void Game::enemyChangeDirection(Entity& enemy){
+void Game::enemyChangeDirection(Entity* enemy){
 
     //used rectangle collider_transform diff
     vector<int> tile = Game::checkTile(enemy);
-    auto& pos = enemy.getComponent<TransformComponent>().position;
-    auto& ai = enemy.getComponent<AIController>();
+    auto& pos = enemy->getComponent<TransformComponent>().position;
+    auto& ai = enemy->getComponent<AIController>();
     vector<int> dir;
     for(int i = 0;i<4;i++)
     {
@@ -347,6 +370,25 @@ void Game::enemyChangeDirection(Entity& enemy){
     int seed = rand();
     int fin_dir = dir[(seed % dir.size() + dir.size()) % dir.size()];
     ai.MovementDirection = fin_dir;
+
+}
+
+Entity& Game::addDragonBall(int tileX, int tileY, int star){
+    Entity& collectible(manager.addEntity());
+    collectible.addComponent<TransformComponent>(tileX*TILE_SIZE, tileY*TILE_SIZE, TILE_SIZE, TILE_SIZE, 1.0);
+    map <string, Animation*> anims;
+    if(star < 1 || star > 7) cout<<"Error: DragonBall index Out of range";
+
+    int srcX = 8 + 40*(star - 1);
+    int srcY = 24;
+    anims.insert(pair<string, Animation*>("Idle", new Animation(0, 1, 100, srcX, srcY)));
+    collectible.addComponent<SpriteComponent>("assets/spritesheets/dragonball_items.png", true, anims, "Idle");
+    collectible.addComponent<ColliderComponent>("DragonBall");
+    collectible.addGroup(groupCollectibles);
+    return collectible;
+
+
+
 
 }
 

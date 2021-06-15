@@ -6,6 +6,8 @@
 // #include "EntityComponentSystem.hpp"
 #include "Components.hpp"
 #include "TileComponent.hpp"
+#include "AIController.hpp"
+#include "KeyboardController.hpp"
 
 
 class ColliderComponent : public Component 
@@ -74,7 +76,7 @@ class ColliderComponent : public Component
             collider.h = static_cast<int>(transform->height * transform->scale);
 
             //hardcoding here
-            if(!entity->hasComponent<TileComponent>())
+            if(entity->hasComponent<KeyboardController>() || entity->hasComponent<AIController>())
             {
                 collider.y = collider.y + 10;
                 collider.h = collider.h - 10;
