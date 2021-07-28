@@ -1,0 +1,12 @@
+Add Collision with Tiles (Don't allow tank to jump over lines)
+
+--> Instead of making 16 different Tiles
+--> First Render the Background with default color.
+--> Add vertical and horizontal Lines <TileComponent> for collision
+
+Roation of Tank with Mouse
+Firing bullets on pressing spacebar or Left Mouse Button
+
+
+Need to integrate "GenerateTiles/Tiles.py" with cpp file to generate tiles using constant ROWS_TO_SKIP_PYTHON
+(call python file from c++)
