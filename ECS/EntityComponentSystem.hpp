@@ -181,7 +181,7 @@ class Manager
     public:
         void update()
         {
-            for(auto& e: entities) e->update();
+            for(auto& e: entities) {e->update();}
         }
         void draw()
         {

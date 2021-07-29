@@ -26,17 +26,38 @@ int main(int argc, char* argv[]){
     game -> init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, false);
 
     while(game -> running()){
-
-        frameStart = SDL_GetTicks();
-
-        game -> handleEvents();
-        game -> update();
-        game -> render();
-
-        frameTime = SDL_GetTicks() - frameStart;
         
-        if(FrameDelay > frameTime){
-            SDL_Delay(FrameDelay - frameTime);
+
+        SDL_PollEvent(&Game::event);
+        if(Game::event.type == SDL_KEYDOWN){
+            if(Game::event.key.keysym.sym == SDLK_p){
+                Game::paused = !Game::paused;
+            }
+
+            else if(Game::event.key.keysym.sym == SDLK_ESCAPE){
+                Game::isRunning = false;
+            }
+
+        }
+
+        else if(Game::event.type == SDL_QUIT){
+            Game::isRunning = false;
+        }
+        
+        if(!Game::paused)
+        {
+            frameStart = SDL_GetTicks();
+
+            game -> handleEvents();
+            game -> update();
+            game -> render();
+
+            frameTime = SDL_GetTicks() - frameStart;
+            
+            if(FrameDelay > frameTime){
+                SDL_Delay(FrameDelay - frameTime);
+            }
+
         }
 
     }

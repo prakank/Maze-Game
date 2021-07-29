@@ -128,10 +128,10 @@ bool renderMenu(string theme)
                             break;
 
                         default:
-                            cout << "Invalid Key\n";
+                            //cout << "Invalid Key\n";
                             break;
                     }
-                    cout << i++ << ".) " << option << "\n";
+                    //cout << i++ << ".) " << option << "\n";
                     
                     break;
 
