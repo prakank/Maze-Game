@@ -23,8 +23,7 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
     int MapTileArray[sizeX][sizeY];
     int t=0;
     while(getline(read, out))
-    {   
-        
+    {           
         vector<string> temp;
         boost::split(temp, out, boost::is_any_of(","));
         //cout<<"vector "<<t<<" "<<temp.size()<<" ";
@@ -39,13 +38,10 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY)
         for(int y = 0; y < sizeY; y++)
         {            
             tile = MapTileArray[x][y];
-
             Game::AddTile(tile, x * DEFAULT_IMAGE_SIZE, y * DEFAULT_IMAGE_SIZE);
-            // cout << tile << " ";
         }
-        // cout << "\n";
     }
+    Game::AddTile(-2, sizeX*DEFAULT_IMAGE_SIZE, 0);
 
-    // mapFile.close();
 
 }

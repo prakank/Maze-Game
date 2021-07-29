@@ -20,14 +20,31 @@ enum groupLabels : size_t
     groupColliders
 };
 
+enum directions: size_t
+{
+        U,
+        L,
+        D,
+        R
+};
+
+enum tags
+{
+        DEFAULT,
+        PLAYER,
+        ENEMY,
+        COLLECTIBLE,
+        TILE
+};
+
 #define WINDOW_SCALE         1
 #define MAP_SCALE            1
 #define ROWS_TO_SKIP        14
 
 #define ROWS_TO_SKIP_PYTHON  2
 
-#define MAZE_ROWS            10     //must be atleast 3
-#define MAZE_COLUMNS         12  //must be atleast 3
+#define MAZE_ROWS            20     //must be atleast 3
+#define MAZE_COLUMNS         22  //must be atleast 3
 #define DEFAULT_IMAGE_SIZE  32      /* CHANGE ONLY IF TILE SIZE AND IMAGE SIZE IS NOT 32 */
 #define TILE_SIZE 32
 #define BACKGROUND_COLOR    "Black" // Supported Colors -> "White" and "Black"
@@ -72,6 +89,7 @@ enum groupLabels : size_t
 #define PLAYER_SPEED    1
 #define SCREEN_WIDTH  MAZE_COLUMNS * DEFAULT_IMAGE_SIZE * WINDOW_SCALE
 #define SCREEN_HEIGHT MAZE_ROWS * DEFAULT_IMAGE_SIZE    * WINDOW_SCALE
+#define OFFSET 100 // For score
 // #define SCREEN_WIDTH WINDOW_WIDTH
 // #define SCREEN_HEIGHT WINDOW_HEIGHT
 // =================================================================================
@@ -92,5 +110,22 @@ enum groupLabels : size_t
 
 // =================================================================================
 
+
+// =================================================================================
+        // --------------- AIController.hpp ---------------
+enum entitymodes: size_t
+{
+        IDLE, 
+        BLINKY_CHASE,
+        BLINKY_SCATTER,
+        INKY_CHASE,
+        INKY_SCATTER,
+        PINKY_CHASE,
+        PINKY_SCATTER,
+        CLYDE_CHASE,
+        CLYDE_SCATTER
+};
+
+// =================================================================================
 
 #endif

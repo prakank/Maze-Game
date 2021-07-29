@@ -12,6 +12,8 @@ class TransformComponent : public Component{
 
     public:
 
+
+        int tag = DEFAULT;
         Vector2D position;
         Vector2D velocity;
         int speed = PLAYER_SPEED;

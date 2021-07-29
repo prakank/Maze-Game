@@ -15,6 +15,8 @@
 
 class ColliderComponent;
 
+class Manager;
+
 using namespace std;
 
 class Game{
@@ -36,6 +38,7 @@ class Game{
         
         static SDL_Rect camera;
         static bool isRunning;
+        static bool showMenu;
         static int RowsToSkip;
         static string Color;
         static MazeGenerator* Maze;
@@ -43,7 +46,10 @@ class Game{
         static void enemyChangeDirection(Entity* enemy);
         static Entity& addDragonBall(int TileX, int TileY, int stars);
 
+        static bool paused;
+        static Manager* manager;
 
+        static int bfs(int TileX, int TileY);
 
     private:
         

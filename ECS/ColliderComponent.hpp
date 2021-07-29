@@ -3,10 +3,9 @@
 
 #include <string>
 #include "SDL.h"
-// #include "EntityComponentSystem.hpp"
 #include "Components.hpp"
 #include "TileComponent.hpp"
-#include "AIController.hpp"
+//#include "AIController.hpp"
 #include "KeyboardController.hpp"
 
 
@@ -76,7 +75,7 @@ class ColliderComponent : public Component
             collider.h = static_cast<int>(transform->height * transform->scale);
 
             //hardcoding here
-            if(entity->hasComponent<KeyboardController>() || entity->hasComponent<AIController>())
+            if(transform->tag == ENEMY || transform->tag == PLAYER)
             {
                 collider.y = collider.y + 10;
                 collider.h = collider.h - 10;

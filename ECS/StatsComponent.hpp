@@ -8,6 +8,8 @@
 #include "TransformComponent.hpp"
 
 class StatsComponent: public Component{
+
+public:
     int health_max;
     bool isPlayer;
     bool hasDragonBall[8] = {false, false, false, false, false, false, false, false};
@@ -15,11 +17,13 @@ class StatsComponent: public Component{
     int ki;
     int timeOfLastHit = SDL_GetTicks();
     int timeFromLastHit;
+    int coinCount;
 
     StatsComponent(int health_init, bool isPlayer_init){
         isPlayer = isPlayer_init;
         health = health_init;
         health_max = health_init;
+        coinCount = 0;
     }
 
     void update(){
@@ -29,9 +33,6 @@ class StatsComponent: public Component{
         }
     }
 
-}
-
-
-
+};
 
 #endif

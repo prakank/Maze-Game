@@ -41,7 +41,7 @@ void MazeGeneration::Generate()
     srand(random_seed);
     startX = rand() % Rows;
     startY = rand() % Columns;
-    cout<<"X, Y"<<startX<<" "<<startY<<"\n";
+    // cout<<"X, Y"<<startX<<" "<<startY<<"\n";
     cells.push(mp(startX,startY));
     Visited[startX][startY] = 1;
     int cnt = 1;
@@ -66,7 +66,7 @@ void MazeGeneration::Generate()
         }
         pii y = temp[rand() % temp.size()];
         Visited[y.ff][y.ss] = 1;
-        cout<<"Point "<<y.ff<<" "<<y.ss<<"\n";
+        // cout<<"Point "<<y.ff<<" "<<y.ss<<"\n";
         cells.push(y);
         PushIntoArray(x,y);        
         cnt++;
@@ -98,8 +98,8 @@ void MazeGeneration::WriteToText()
 {
     std::string filename = "Maze_txtfile.txt";
     std::ofstream output(filename);
-    if(output.is_open()) cout<<"\n\nJa\n\n";
-    else cout<<"\n\nNein\n\n";
+    // if(output.is_open()) cout<<"\n\nJa\n\n";
+    // else cout<<"\n\nNein\n\n";
 
 
     for(int i=0; i< Rows; i++){

@@ -7,6 +7,7 @@
 #include <string>
 #include <fstream>
 #include<cstddef>
+#include <memory>
 #include "../Constants.hpp"
 
 #define pii std::pair<int,int>
@@ -37,7 +38,11 @@ public:
     }
 
     static void join(Node* a, Node* b){
-        if(!((a->row == b-> row && ((a->col - b->col)*(a->col - b->col)==1)) || (a->col == b-> col && ((a->row - b->row)*(a->row - b->row)==1)))) {cout<<"\n\n\nNodes not adjacent\n\n\n"; return;}
+        if(!((a->row == b-> row && ((a->col - b->col)*(a->col - b->col)==1)) || (a->col == b-> col && ((a->row - b->row)*(a->row - b->row)==1)))) 
+        {
+            // cout<<"\n\n\nNodes not adjacent\n\n\n"; 
+            return;
+        }
         if(a->row == b->row){
             if(a->col == b->col + 1){
                 a->neighbours[1] = true;
@@ -117,14 +122,14 @@ public:
             Node::join(node1, node2);
             vec[root2->id]->size = size1 + size2;
 
-            cout<<"Node3(1) joined("<<node1->row<<", "<<node1->col<<") and ("<<node2->row<<", "<<node2->col<<")\n";
+            // cout<<"Node3(1) joined("<<node1->row<<", "<<node1->col<<") and ("<<node2->row<<", "<<node2->col<<")\n";
         }
         else if(size1 >= size2){
             vec[root2->id]->root = root1;
             Node::join(node1, node2);
             //vec[node2->id]->parent = node1;
             vec[root1->id]->size = size1 + size2;
-            cout<<"Node3(2) joined ("<<node2->row<<", "<<node2->col<<") and ("<<node1->row<<", "<<node1->col<<")\n";
+            // cout<<"Node3(2) joined ("<<node2->row<<", "<<node2->col<<") and ("<<node1->row<<", "<<node1->col<<")\n";
         }
 
         return size1 + size2;
@@ -174,11 +179,12 @@ public:
        
 
         shuffle(edges.begin(), edges.end(), default_random_engine(seed));
-        cout<<"\n\n Edges:\n";
+        // cout<<"\n\n Edges:\n";
 
-        for(int i = 0; i< edges.size();i++){
-            cout<<"("<<edges[i]->src->row <<" "<<edges[i]->src->col<<"), ("<<edges[i]->dst->row<<" "<<edges[i]->dst->col<<")\n";
-        }
+        // for(int i = 0; i< edges.size();i++){
+        //     cout<<"("<<edges[i]->src->row <<" "<<edges[i]->src->col<<"), ("<<edges[i]->dst->row<<" "<<edges[i]->dst->col<<")\n";
+        // }
+
         for(int i = 0; i < MAZE_ROWS;i++){
             for(int j = 0; j<MAZE_COLUMNS;j++){
                 vec_union.pb(new UnionSubset(nodes[i][j]));
@@ -190,12 +196,12 @@ public:
             Node* node1 = edge->src;
             Node* node2 = edge->dst;
 
-            cout<<"vec_union.size() "<<vec_union.size();
-            cout<<"node1: "<<node1->row<<" "<<node1->col<<"\n";
-            cout<<"node2: "<<node2->row<<" "<<node2->col<<"\n";
-            cout<<"\n\n";
+            // cout<<"vec_union.size() "<<vec_union.size();
+            // cout<<"node1: "<<node1->row<<" "<<node1->col<<"\n";
+            // cout<<"node2: "<<node2->row<<" "<<node2->col<<"\n";
+            // cout<<"\n\n";
             int x = UnionSubset::union2(vec_union, node1, node2);
-            cout<<"x: "<<x<<"\n";
+            // cout<<"x: "<<x<<"\n";
             if(x >= v)
                 {break;}
         }
@@ -239,7 +245,7 @@ public:
             }
         }*/
 
-        cout<<"cnt: "<<cnt;
+        // cout<<"cnt: "<<cnt;
         
         
     }
@@ -258,13 +264,14 @@ public:
 
         unique_ptr<Graph> graph = make_unique<Graph>(seed);
 
-        cout<<"\n\n\n\n";
+        // cout<<"\n\n\n\n";
         //for(auto edge:edgeList){
         //  cout<<"Src: "<<edge->src->row<<" "<<edge->src->col<<"\n";
         //  cout<<"Dst: "<<edge->dst->row<<" "<<edge->dst->col<<"\n";
         // cout<<"\n";
 
-        cout<<"\n\n\n";
+        // cout<<"\n\n\n";
+        
         vector<vector<Node*>> nodeList = graph->nodes;
 
         MazeGenerator::remove_deadEnds(nodeList);
@@ -319,10 +326,10 @@ public:
             }
         }
 
-        cout<<"DeadEnds: \n\n";
-        for(int i = 0;i < deadEnds.size();i++){
-            cout<<deadEnds[i]->row<<" "<<deadEnds[i]->col<<"\n";
-        }
+        // cout<<"DeadEnds: \n\n";
+        // for(int i = 0;i < deadEnds.size();i++){
+        //     cout<<deadEnds[i]->row<<" "<<deadEnds[i]->col<<"\n";
+        // }
 
         std::shuffle(deadEnds.begin(), deadEnds.end(), std::default_random_engine(time(0)));
         int n_remove = deadEnds.size()*DEAD_END_REMOVAL;
@@ -333,7 +340,7 @@ public:
                 z = (j+r)%4;
                 if(!temp->neighbours[z] && !temp->isWallEdge(z)){
                     temp->neighbours[z] = true;
-                    cout<<"\n\nrow: "<<temp->row - (z%2 - 1)*(z - 1)<<", col: "<<temp->col + (z%2)*(z - 2)<<", index: "<<2-z + 2*(z%2)<<", isWallEdge: "<<temp->isWallEdge(z)<<"\n";
+                    // cout<<"\n\nrow: "<<temp->row - (z%2 - 1)*(z - 1)<<", col: "<<temp->col + (z%2)*(z - 2)<<", index: "<<2-z + 2*(z%2)<<", isWallEdge: "<<temp->isWallEdge(z)<<"\n";
                     nodes[temp->row - (z%2 - 1)*(z - 1)][temp->col + (z%2)*(z - 2)]->neighbours[2-z + 2*(z%2)] = true;
                     break;
                 }

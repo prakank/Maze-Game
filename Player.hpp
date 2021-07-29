@@ -7,16 +7,21 @@
 #include "ECS/Components.hpp"
 #include "ECS/EntityComponentSystem.cpp"
 #include "ECS/Animation.hpp"
+#include "ECS/StatsComponent.hpp"
 
 class Player: public Entity{
 public:
 
-    Player(Manager& m_Manager): Entity(m_Manager){
+    Player(Manager& m_Manager): Entity(m_Manager)
+    {
+
     }
 
     void init() override{
         this->addComponent<TransformComponent>(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, DEFAULT_IMAGE_SIZE*2,
                                                  DEFAULT_IMAGE_SIZE*2, 1.0/2);
+
+        this->getComponent<TransformComponent>().tag = PLAYER;
 
         map<string, Animation*> map1;
         map1.insert(pair<string, Animation*>("Idle_U", new Animation(0, 1, 100, 0, 0)));
@@ -29,24 +34,13 @@ public:
         map1.insert(pair<string, Animation*>("Walk_R", new Animation(7, 9, 100, 15 * DEFAULT_IMAGE_SIZE*2, 3 * DEFAULT_IMAGE_SIZE*2)));
         this->addComponent<SpriteComponent>("assets/spritesheets/character1_all.png", true, map1, "Idle_D");
         this->addComponent<KeyboardController>();
+        this->addComponent<StatsComponent>(5,true);
         this->addComponent<ColliderComponent>("Player");
         this->addGroup(groupPlayers);
         //manager = m_manager;
         //cout<<"been through here";
 
     }
-
-
-
-
-
-
-
-
-
-    
-
-
 };
 
 #endif
