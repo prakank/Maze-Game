@@ -104,11 +104,14 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         }
         Game::addDragonBall(1, MAZE_ROWS, -1);
     }
+
+    
     Game::isRunning = assignMenu;
     return;
 }
 
 void Game::handleEvents(){
+    
     SDL_PollEvent(&event);
     switch(event.type){
         case SDL_QUIT:
@@ -125,6 +128,7 @@ void Game::update(){
     
     Game::manager->refresh();
     Game::manager->update();
+    
 
     // Vector2D pVel = player.getComponent<TransformComponent>().velocity;
     // int pSpeed    = player.getComponent<TransformComponent>().speed;  
