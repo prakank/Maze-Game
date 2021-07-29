@@ -1,0 +1,9 @@
+chktex exit: 0
+Latexmk: applying rule 'pdflatex'...
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex)
+ \write18 enabled.
+entering extended mode
+=== TeX engine is 'pdfTeX'
+Latexmk: Errors, in force_mode: so I tried finishing targets
+qpdf exit code=0
+Renaming optimised file to output.pdf
