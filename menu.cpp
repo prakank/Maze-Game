@@ -22,7 +22,7 @@ void pacman_coin()
 
 bool renderMenu(string theme)
 {
-    // Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048);
+    Mix_OpenAudio(44100,MIX_DEFAULT_FORMAT,2,2048);
     pacmanCoinMusic = Mix_LoadWAV("assets/sounds/coin_collect.mp3");
     menuButton = Mix_LoadWAV("assets/sounds/button_hover.ogg");
     backgroundMusic = Mix_LoadMUS("assets/sounds/pacman_beginning.wav");
